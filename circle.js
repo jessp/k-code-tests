@@ -24,6 +24,7 @@ let radius = Math.round((Math.floor(height/4) - 2)/2)*2;
 let midX = Math.floor(width/2);
 let midY = Math.floor(height/2);
 
+
 //initial tuck cast-on
 for (var s=width; s>0; s--) {
     if(s%2==front) {

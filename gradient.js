@@ -14,29 +14,6 @@ console.log(";!knitout-2")
 
 console.log("inhook " + Carrier);
 
-/*
-Following the cast-on procedure used in knitout-backend-swg/rib2x2, knitout-examples/Tutorial1/helloworld etc., 
-not like knitout-examples/Tutorial2/rib1x1.
-Also not doing a single line of knits before releasing as in rib1X1.
-*/
-
-//tuck every other column right to left
-for (let n = max; n >= min; --n) {
-	if ((max-n) % 2 == 0) {
-		console.log("tuck - f" + n + " " + Carrier);
-	}
-}
-
-//tuck every other column left to right
-for (let n = min; n <= max; ++n) {
-	if ((max-n)%2 == 1) {
-		console.log("tuck + f" + n + " " + Carrier);
-	}
-}
-
-//stop tucking
-console.log("releasehook " + Carrier);
-
 
 let height = 20;
 
