@@ -1,15 +1,17 @@
 //Parameters:
 
-const StartingWidth = 4;
-const EndingWidth = 30;
-const Height = 40;
-const Carrier = "3";
+const startingWidth = 4;
+const endingWidth = 30;
+const height = 40;
+const carrier = "3";
 
 
 //Operation:
 
-//Makes a StartingWidth x Height rectangle of plain knitting on the front bed with carrier Carrier.
+//Makes a swatch of plain knitting on the front bed with carrier carrier.
+//Increases gradually from startingWidth in the right bottom corner to endingWidth.
 //Uses an alternating-tucks cast-on.
+
 /*
 xxxxx
 xxxxx
@@ -28,49 +30,52 @@ console.log(";;Carriers: 1 2 3 4 5 6 7 8 9 10");
 
 //Alternating tucks cast-on:
 
-console.log("inhook " + Carrier);
+console.log("inhook " + carrier);
 
 let min = 1;
-let max = EndingWidth;
-let acting_width = StartingWidth;
+let max = endingWidth;
+let actingWidth = startingWidth;
 
-for (let n = acting_width; n >= min; --n) {
+for (let n = actingWidth; n >= min; --n) {
 	if ((max-n) % 2 == 0) {
-		console.log("tuck - f" + n + " " + Carrier);
+		console.log("tuck - f" + n + " " + carrier);
 	}
 }
-for (let n = min; n <= acting_width; ++n) {
+for (let n = min; n <= actingWidth; ++n) {
 	if ((max-n)%2 == 1) {
-		console.log("tuck + f" + n + " " + Carrier);
+		console.log("tuck + f" + n + " " + carrier);
 	}
 }
 
-console.log("miss + f" + acting_width + " " + Carrier);
+console.log("miss + f" + actingWidth + " " + carrier);
 
-console.log("releasehook " + Carrier);
+console.log("releasehook " + carrier);
 
 //direction is important when tucking on an edge
-for (let n = acting_width; n >= min; --n) {
-	console.log("knit - f" + n + " " + Carrier);
+for (let n = actingWidth; n >= min; --n) {
+	console.log("knit - f" + n + " " + carrier);
 }
 
-for (let r = 0; r < Height - 1; ++r) {
+for (let r = 0; r < height - 1; ++r) {
 	if (r % 2 == 1) {
-		if (acting_width < EndingWidth){
-			acting_width++;
+		//we'll increase the width before the row if it should increase
+		if (actingWidth < endingWidth){
+			actingWidth++;
 		}
-		for (let n = acting_width; n >= min; --n) {
-			if (n == acting_width && acting_width < EndingWidth){
-				console.log("tuck - f" + n + " " + Carrier);
+		for (let n = actingWidth; n >= min; --n) {
+			//if we're at the beginning of a row, and we're still increasing width, tuck the first stitch
+			if (n == actingWidth && actingWidth < endingWidth){
+				console.log("tuck - f" + n + " " + carrier);
 			} else {
-				console.log("knit - f" + n + " " + Carrier);
+				console.log("knit - f" + n + " " + carrier);
 			}
 		}
 	} else {
-		for (let n = min; n <= acting_width; ++n) {
-			console.log("knit + f" + n + " " + Carrier);
+		//we can count on knitting normally on the front bed when knitting towards the left
+		for (let n = min; n <= actingWidth; ++n) {
+			console.log("knit + f" + n + " " + carrier);
 		}
 	}
 }
 
-console.log("outhook " + Carrier);
+console.log("outhook " + carrier);

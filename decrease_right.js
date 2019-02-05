@@ -1,15 +1,16 @@
 //Parameters:
 
-const StartingWidth = 30;
-const EndingWidth = 4;
-const Height = 40;
-const Carrier = "3";
+const startingWidth = 30;
+const endingWidth = 4;
+const height = 40;
+const carrier = "3";
 
 
 //Operation:
 
-//Makes a StartingWidth x Height rectangle of plain knitting on the front bed with carrier Carrier.
+//Makes a swatch of plain knitting that gradually decreases on an angle on the right side on the front bed with carrier carrier.
 //Uses an alternating-tucks cast-on.
+
 /*
 x
 x
@@ -25,49 +26,55 @@ xxxxx
 console.log(";!knitout-2");
 console.log(";;Carriers: 1 2 3 4 5 6 7 8 9 10");
 
-
-//Alternating tucks cast-on:
-
-console.log("inhook " + Carrier);
+console.log("inhook " + carrier);
 
 let min = 1;
-let max = min + StartingWidth - 1;
-let acting_width = max;
+let max = min + startingWidth - 1;
+let actingWidth = max;
 
+//Alternating tucks cast-on:
 for (let n = max; n >= min; --n) {
 	if ((max-n) % 2 == 0) {
-		console.log("tuck - f" + n + " " + Carrier);
+		console.log("tuck - f" + n + " " + carrier);
 	}
 }
 for (let n = min; n <= max; ++n) {
 	if ((max-n)%2 == 1) {
-		console.log("tuck + f" + n + " " + Carrier);
+		console.log("tuck + f" + n + " " + carrier);
 	}
 }
 
-console.log("miss + f" + max + " " + Carrier);
+console.log("miss + f" + max + " " + carrier);
 
-console.log("releasehook " + Carrier);
+//release the yarn from the carrier hook
+console.log("releasehook " + carrier);
 
-for (let r = 0; r < Height; ++r) {
+for (let r = 0; r < height; ++r) {
+	//knit normally, alternating between back and front
 	if (r % 2 == 0) {
-		for (let n = acting_width; n >= min; --n) {
-			console.log("knit - f" + n + " " + Carrier);
+		for (let n = actingWidth; n >= min; --n) {
+			console.log("knit - f" + n + " " + carrier);
 		}
 	} else {
-		for (let n = min; n <= acting_width; ++n) {
-			console.log("knit + f" + n + " " + Carrier);
+		for (let n = min; n <= actingWidth; ++n) {
+			console.log("knit + f" + n + " " + carrier);
 		}
 	}
-	if (acting_width > EndingWidth){
+	//if we should decrease the width
+	if (actingWidth > endingWidth){
+		//and we're going towards the right, we're going to attempt to secure some stitches
 		if (r % 2 == 1){
-			console.log("xfer f" + acting_width + " b" + acting_width);
+			//first, transfer them to the back bed
+			console.log("xfer f" + actingWidth + " b" + actingWidth);
+			//then move the back bed left one space
 			console.log("rack -1");
-			console.log("xfer b" + acting_width + " f" + (acting_width - 1));
+			//then transfer the stitch back to the front
+			console.log("xfer b" + actingWidth + " f" + (actingWidth - 1));
+			//and return the back bed to its starting position
 			console.log("rack 0");
 		}
-		acting_width--;
+		actingWidth--;
 	}
 }
 
-console.log("outhook " + Carrier);
+console.log("outhook " + carrier);

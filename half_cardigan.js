@@ -1,12 +1,12 @@
 //Parameters:
 
-const Width = 30; //must be even
-const Height = 40;
-const Carrier = "3";
+const width = 30;
+const height = 40;
+const carrier = "3";
 
 //Operation:
 
-//Makes a Width x Height rectangle of plain knitting on the front bed with carrier Carrier.
+//Makes a width x height rectangle of half-cardigan knitting on the front bed with carrier carrier.
 //Uses an alternating-tucks cast-on.
 
 
@@ -16,45 +16,68 @@ console.log(";;Carriers: 1 2 3 4 5 6 7 8 9 10");
 
 //Alternating tucks cast-on:
 
-console.log("inhook " + Carrier);
+console.log("inhook " + carrier);
 
 let min = 1;
-let max = min + Width - 1;
+let max = min + width - 1;
 
+//the knit alternates between knit front and tuck back in the first line
+//so when we cast on, we want to make sure our tuck cast-on alternates tuck front/tuck back in the same order
 for (let n = max; n >= min; --n) {
 	if ((max-n) % 2 == 0) {
-		console.log("tuck - f" + n + " " + Carrier);
+		console.log("tuck - f" + n + " " + carrier);
 	}
 }
 for (let n = min; n <= max; ++n) {
 	if ((max-n)%2 == 1) {
-		console.log("tuck + f" + n + " " + Carrier);
+		console.log("tuck + b" + n + " " + carrier);
 	}
 }
 
-console.log("miss + f" + max + " " + Carrier);
+console.log("miss + f" + max + " " + carrier);
 
-console.log("releasehook " + Carrier);
+console.log("releasehook " + carrier);
 
-for (let r = 0; r < Height; ++r) {
+//note: we might have to knit a row of plain knitting here between the cast-on tucks and the knit tucks
+
+
+for (let r = 0; r < height; ++r) {
 	if (r % 2 == 0) {
 		for (let n = max; n >= min; --n) {
+			//alternate between front knits and back tucks on alternating rows going towards the left
 			if (n % 2 === 0){
-				console.log("knit - f" + n + " " + Carrier);
+				console.log("knit - f" + n + " " + carrier);
 			} else {
-				console.log("tuck - b" + n + " " + Carrier);
+				console.log("tuck - b" + n + " " + carrier);
+			}
+		}
+		//after the last row of stitches, transfer any stitches on the back bed to the front
+		if (r === (height - 1)){
+			for (let xf = max; n >= min; --xf) {
+				if (xf % 2 === 0){
+					console.log("xfer b" + xf + " f" + xf);
+				}
 			}
 		}
 	} else {
 		for (let n = min; n <= max; ++n) {
 			if (n % 2 === 1){
-				console.log("knit + b" + n + " " + Carrier);
+				//alternate between front knits and back knits on alternating rows going towards the left
+				console.log("knit + b" + n + " " + carrier);
 			} else {
-				console.log("knit + f" + n + " " + Carrier);
+				console.log("knit + f" + n + " " + carrier);
+			}
+		}
+		//after the last row of stitches, transfer any stitches on the back bed to the front
+		if (r === (height - 1)){
+			for (let xf = min; xf <= max; ++xf) {
+				if (xf % 2 === 1){
+					console.log("xfer b" + xf + " f" + xf);
+				}
 			}
 		}
 	}
 }
 
 
-console.log("outhook " + Carrier);
+console.log("outhook " + carrier);

@@ -1,14 +1,15 @@
-#!/bin/sh
-':' //; exec "$(command -v nodejs || command -v node)" "$0" "$@"
-
+/*
+Not my code. From Textile's Lab at: https://github.com/textiles-lab/knitout-examples
+Modified only to change carriers and to remove top couple lines
+*/
 
 let height = 19; //height of square
 let width = Math.floor(height/2); //width of each square
 let reps = 2; //how many squares in each row
 let repeats = 1; //each repeat is a pair of square rows
 let padding = 15;
-let Carrier = 5;
-let Carrier2 = 3;
+let Carrier = 3;
+let Carrier2 = 2;
 let min = 1;
 let max = min + (2*reps+1)*(width);
 

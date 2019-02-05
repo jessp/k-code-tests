@@ -47,7 +47,7 @@ for (let n = min; n <= max; ++n) {
 
 console.log("miss + f" + max + " " + carrier);
 
-//release the hook from the carrier hook
+//release the yarn from the carrier hook
 console.log("releasehook " + carrier);
 
 
