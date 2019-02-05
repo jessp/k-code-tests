@@ -1,140 +1,110 @@
-let Carrier = 6;
-
-
-console.log(";!knitout-2");
-
-//headers
-console.log(";;Machine: SWGXYZ");
-console.log(";;Gauge: 15");
-console.log("");
-
-// bring in carrier using yarn inserting hook
-console.log("inhook " + Carrier);
-
-
-// swatch variables
+//Parameters:
+let carrier = "3";
 var height = 30;
 var width = 41;
 
-// make sure the very first stitch in on the front bed,
-// since the machine complains if its on the back
-var front = width%2;
+//Operation:
 
-let radius = Math.round((Math.floor(height/4) - 2)/2)*2;
-let midX = Math.floor(width/2);
-let midY = Math.floor(height/2);
+//Makes a rectangle of size width x height in plain knit.
+//In the centre of the rectangle, there is a circle of stitches that are either  
+//knits or perls depending on a random variable.
+
+/*
+  
+xxxxxxxxxxxx
+xxxx-x--xxxx
+xx-xx-x-x-xx
+xx--xx-x--xx
+xxxx--x-xxxx
+xxxxxxxxxxxx
+
+*/
+
+console.log(";!knitout-2");
+console.log(";;Carriers: 1 2 3 4 5 6 7 8 9 10");
+
+// bring in carrier using yarn inserting hook
+console.log("inhook " + carrier);
+
+let min = 1;
+let max = min + width - 1;
+
+let radius = Math.round((Math.floor(height/4) - 2)/2)*2; //radius of the circle, ensuring it's slightly smaller than half the area
+let midX = Math.floor(width/2); //horizontal center of the circle
+let midY = Math.floor(height/2); //vertical center of the circle
 
 
 //initial tuck cast-on
-for (var s=width; s>0; s--) {
-    if(s%2==front) {
-    	console.log("tuck - f" + s + " " + Carrier);
-    }
-    else {
-    	console.log("tuck - b" + s + " " + Carrier);
-    }
+for (let n = max; n >= min; --n) {
+	if ((max-n) % 2 == 0) {
+		console.log("tuck - f" + n + " " + carrier);
+	}
 }
-
-//rib on way back, skip last of the tucks
-for (var s=2; s<=width; s++) {
-    if (s%2==front) {
-    	console.log("knit + f" + s + " " + Carrier);
-    }
-    else {
-    	console.log("knit + b" + s + " " + Carrier);
-    }
+for (let n = min; n <= max; ++n) {
+	if ((max-n)%2 == 1) {
+		console.log("tuck + f" + n + " " + carrier);
+	}
 }
 
 
-//release the yard inserting hook
-console.log("releasehook " + Carrier);
+
+console.log("miss + f" + max + " " + carrier);
+
+//release the hook from the carrier hook
+console.log("releasehook " + carrier);
 
 
-// knit until we have the right swatch height
+//we need to calculate beforehand if stitches at any given index are knitted or perled
+//since we need to be able to query previous rows so we know if we need to transfer to
+//the front or back bed
 var current_height = 0;
-var top_height = 0; //since we go back and forth to make a stitch, we need another measure of height just on one direction
-while (current_height<height) {
-	let randomForB = [];
-
-	//construct our values at the beginning to ensure forward and background are the same at a given index
-	for (var i=0; i<=width; i++) {
-    	randomForB.push(Math.random() < 0.5 ? "f" : "b");
-	}
-
-	console.log(";<");
-
-	for (var s=width; s>0; s--) {
-		randomForB.push((Math.random() > 0.5) ? "f" : "b");
-		//if point is outside the circle
-		if ((Math.pow((s - midX), 2) + Math.pow((top_height - midY), 2)) > Math.pow(radius, 2)) {
-			if (s%2==front) {
-				console.log("knit - f" + s + " " + Carrier);
-			}
-			else {
-				console.log("knit - b" + s + " " + Carrier);
-			}
-		} else{
-			console.log("knit - " + randomForB[s] + s + " " + Carrier + " ;random");
-		}
-
-	}
-
-
-	for (var s=width; s>0; s--) {
-		if ((Math.pow((s - midX), 2) + Math.pow((top_height - midY), 2)) > Math.pow(radius, 2)) {
-			if (s%2==front) {
-				console.log("xfer f" + s + " b" + s);
-			}
-			else {
-				console.log("xfer b" + s + " f" + s);
-			}
+let random_indexes = [];
+while (current_height < height) {
+	let index_line = [];
+	for (var s = min; s <= max; s++) {
+		let outside_circle = (Math.pow((s - midX), 2) + Math.pow((current_height - midY), 2)) > Math.pow(radius, 2);
+		if (outside_circle) {
+			index_line.push("f");
 		} else {
-			//not sure if we need to do anything here if we're just knitting/perling
+			let randomForB = (Math.random() > 0.5) ? "f" : "b";
+			index_line.push(randomForB);
 		}
 	}
-	console.log(";>");
+	random_indexes.push(index_line);
 	current_height++;
+}
 
-	if (current_height >= height) {
-		break;
+
+//knit until we have the right swatch height
+var current_height = 0;
+while (current_height < height) {
+	//after we've knitted the first row
+	if (current_height > 0){
+		for (let n = min; n <= max; ++n) {
+			//are we switching from back bed to the front?
+			if (random_indexes[current_height][n - 1] !== random_indexes[current_height - 1][n - 1]){ 
+				let from_back = random_indexes[current_height][n - 1] === "b";
+				//transfer to opposite beds as needed
+				console.log("xfer " + (from_back ? "b" : "f") + n + " " + (from_back ? "f" : "b") +  n);
+			}
+		}
 	}
-
-	for (var s=1; s<=width; s++) {
-		//might need adjustment based on value of 's'
-		if ((Math.pow((s - midX), 2) + Math.pow((top_height - midY), 2)) > Math.pow(radius, 2)) {
-			if (s%2==front) {
-				console.log("knit + b" + s + " " + Carrier);
-			}
-			else {
-				console.log("knit + f" + s + " " + Carrier);
-			}
-		} else {
-			console.log("knit + " + randomForB[s] + s + " " + Carrier + " ;random");
+	//every other row, change direction so we knit back and forth
+	if (current_height % 2 == 0) {
+		for (let n = max; n >= min; --n) {
+			console.log("knit - " + random_indexes[current_height][n - 1] + n + " " + carrier);
+		}
+	} else {
+		for (let n = min; n <= max; ++n) {
+			console.log("knit + " + random_indexes[current_height][n - 1] + n + " " + carrier);
 		}
 	}
 
-
-	for (var s=1; s<=width; s++) {
-		if ((Math.pow((s - midX), 2) + Math.pow((top_height - midY), 2)) > Math.pow(radius, 2)) {
-			if (s%2==front) {
-				console.log("xfer b" + s + " f" + s);
-			}
-			else {
-				console.log("xfer f" + s + " b" + s);
-			}
-		} else {
-			//not sure if we need to do anything here if we're just knitting/perling
-		}
-	}
-		
 	current_height++;
-	top_height += 2; 
-	console.log("");
-
 }
 
 // bring the yarn out with the yarn inserting hook
-console.log("outhook " + Carrier);
+console.log("outhook " + carrier);
 
 
 
