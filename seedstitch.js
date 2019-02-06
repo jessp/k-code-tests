@@ -1,11 +1,10 @@
-// import the knitoutWriter code and instantiate it as an object
-// passing in all eight carriers despite not using all of them
-const knitout = require('../../knitout-frontend-js/knitout');
-let k = new knitout.Writer({carriers:['1', '2', '3', '4', '5', '6', '7', '8']});
+/*
+Not my code. From Textiles Lab at: https://github.com/textiles-lab/knitout-examples
+Modified only to change carriers and to remove knitout writer
+*/
 
-// add some headers relevant to this job
-k.addHeader('Machine','SWGXYZ');
-k.addHeader('Gauge','15');
+console.log(";!knitout-2");
+console.log(";;Carriers: 1 2 3 4 5 6 7 8 9 10");
 
 // swatch variables
 var height = 30;
@@ -17,26 +16,26 @@ var carrier = '6';
 var front = width%2;
 
 // bring in carrier using yarn inserting hook
-k.inhook(carrier);
+console.log("inhook " + carrier);
 
 
 //initial tuck cast-on
 for (var s=width; s>0; s--) {
     if(s%2==front) {
-        k.tuck("-", "f"+s, carrier);
+    	console.log("tuck - f" + s + " " + carrier);
     }
     else {
-        k.tuck("-", "b"+s, carrier);
+    	console.log("tuck - b" + s + " " + carrier);
     }
 }
 
 //rib on way back, skip last of the tucks
 for (var s=2; s<=width; s++) {
     if (s%2==front) {
-        k.knit("+", "f"+s, carrier);
+    	console.log("knit + f" + s + " " + carrier);
     }
     else {
-        k.knit("+", "b"+s, carrier);
+        console.log("knit + b" + s + " " + carrier);
     }
 }
 
@@ -45,7 +44,7 @@ for (var s=2; s<=width; s++) {
 
 
 // release the yarn inserting hook
-k.releasehook(carrier);
+console.log("releasehook " + carrier);
 
 
 // knit until we have the right swatch height
@@ -53,20 +52,20 @@ var current_height = 0
 while (current_height<height) {
 	for (var s=width; s>0; s--) {
 		if (s%2==front) {
-			k.knit("-", "f"+s, carrier);
+			console.log("knit - f" + s + " " + carrier);
 		}
 		else {
-			k.knit("-", "b"+s, carrier);
+			console.log("knit - b" + s + " " + carrier);
 		}
 	}
 
 
 	for (var s=width; s>0; s--) {
 		if (s%2==front) {
-			k.xfer("f"+s, "b"+s);
+			console.log("xfer f" + s + " b" + s);
 		}
 		else {
-			k.xfer("b"+s, "f"+s);
+			console.log("xfer b" + s + " f" + s);
 		}
 	}
 
@@ -79,20 +78,20 @@ while (current_height<height) {
 
 	for (var s=1; s<=width; s++) {
 		if (s%2==front) {
-			k.knit("+", "b"+s, carrier);
+			console.log("knit + b" + s + " " + carrier);
 		}
 		else {
-			k.knit("+", "f"+s, carrier);
+			console.log("knit + f" + s + " " + carrier);
 		}
 	}
 
 
 	for (var s=1; s<=width; s++) {
 		if (s%2==front) {
-			k.xfer("b"+s, "f"+s);
+			console.log("xfer b" + s + " f" + s);
 		}
 		else {
-			k.xfer("f"+s, "b"+s);
+			console.log("xfer f" + s + " b" + s);
 		}
 	}
 
@@ -101,10 +100,7 @@ while (current_height<height) {
 }
 
 // bring the yarn out with the yarn inserting hook
-k.outhook(carrier);
-
-// write the knitout to a file called "out.k"
-k.write('../../swatches/seedstitch.k');
+console.log("outhook " + carrier);
 
 
 

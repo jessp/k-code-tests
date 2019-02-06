@@ -1,4 +1,4 @@
-//Not my code, from the Textile's Lab repo https://github.com/textiles-lab/knitout-examples
+//Not my code, from the Textiles Lab repo https://github.com/textiles-lab/knitout-examples
 //only changed to remove knitout writer and to change the carrier
 
 // swatch variables

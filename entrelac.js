@@ -1,5 +1,5 @@
 /*
-Not my code. From Textile's Lab at: https://github.com/textiles-lab/knitout-examples
+Not my code. From Textiles Lab at: https://github.com/textiles-lab/knitout-examples
 Modified only to change carriers and to remove top couple lines
 */
 
@@ -15,8 +15,8 @@ let max = min + (2*reps+1)*(width);
 
 let xfer_inside = true; //if true, slant rows inside the squares
 
-console.log(";!knitout-2")
-console.log(";;Carriers: 1 2 3 4 5 6 7 8 9 10")
+console.log(";!knitout-2");
+console.log(";;Carriers: 1 2 3 4 5 6 7 8 9 10");
 
 console.log("inhook " + Carrier);
 

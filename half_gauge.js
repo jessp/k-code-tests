@@ -62,6 +62,20 @@ for (let r = 0; r < height/2; ++r) {
 
 //for the upper half of the fabric, alternate between knits and misses
 for (let r = height/2; r < height; ++r) {
+	//before the first row of half guage, transfer threads to be on missed needles
+	//onto a neighbouring needle. Direction of racking shouldn't matter
+	if (r === height/2){
+		//remember, our transfering process involves moving transfering back and forth from the back to the front
+		//carrier, and moving ("racking") the back carrier
+		for (let n = max; n >= min; --n) {
+			if (n % 2 === 0){
+				console.log("xfer f" + n + " b" + n);
+				console.log("rack 1");
+				console.log("xfer b" + n + " f" + (n+1));
+				console.log("rack 0");
+			}
+		}
+	}
 	if (r % 2 == 0) {
 		for (let n = max; n >= min; --n) {
 			if (n % 2 === 0){

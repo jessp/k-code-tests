@@ -1,13 +1,11 @@
 //Parameters:
 
-const Width = 30;
-const Height = 40;
-const Carrier = "3";
+const width = 30;
+const height = 40;
+const carrier = "3";
 
 //Operation:
-
-//Makes a Width x Height rectangle of plain knitting on the front bed with carrier Carrier.
-//Uses an alternating-tucks cast-on.
+//Makes a tube with circumference of width * 2 and height of height/2
 
 
 console.log(";!knitout-2");
@@ -16,36 +14,50 @@ console.log(";;Carriers: 1 2 3 4 5 6 7 8 9 10");
 
 //Alternating tucks cast-on:
 
-console.log("inhook " + Carrier);
+console.log("inhook " + carrier);
 
 let min = 1;
-let max = min + Width - 1;
+let max = min + width - 1;
 
+//cast-on on the front bed first...
 for (let n = max; n >= min; --n) {
 	if ((max-n) % 2 == 0) {
-		console.log("tuck - f" + n + " " + Carrier);
+		console.log("tuck - f" + n + " " + carrier);
 	}
 }
 for (let n = min; n <= max; ++n) {
 	if ((max-n)%2 == 1) {
-		console.log("tuck + f" + n + " " + Carrier);
+		console.log("tuck + f" + n + " " + carrier);
 	}
 }
 
-console.log("miss + f" + max + " " + Carrier);
+//and then on the back bed
+for (let n = max; n >= min; --n) {
+	if ((max-n) % 2 == 0) {
+		console.log("tuck - b" + n + " " + carrier);
+	}
+}
+for (let n = min; n <= max; ++n) {
+	if ((max-n)%2 == 1) {
+		console.log("tuck + b" + n + " " + carrier);
+	}
+}
 
-console.log("releasehook " + Carrier);
+console.log("miss + f" + max + " " + carrier);
 
-for (let r = 0; r < Height; ++r) {
+console.log("releasehook " + carrier);
+
+for (let r = 0; r < height; ++r) {
+	//essentially, knit going in only one way on each bed, so they only meet on the edges
 	if (r % 2 == 0) {
 		for (let n = max; n >= min; --n) {
-			console.log("knit - f" + n + " " + Carrier);
+			console.log("knit - f" + n + " " + carrier);
 		}
 	} else {
 		for (let n = min; n <= max; ++n) {
-			console.log("knit + b" + n + " " + Carrier);
+			console.log("knit + b" + n + " " + carrier);
 		}
 	}
 }
 
-console.log("outhook " + Carrier);
+console.log("outhook " + carrier);

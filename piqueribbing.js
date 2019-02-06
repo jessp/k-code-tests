@@ -1,10 +1,10 @@
-//import the knitout writer code and instantiate it as an object
-var knitout = require('../../knitout-frontend-js/knitout');
-k = new knitout.Writer({carriers:['1', '2', '3', '4', '5', '6', '7', '8']});
+/*
+Not my code. From Textiles Lab at: https://github.com/textiles-lab/knitout-examples
+Modified only to change carriers and to remove knitout writer
+*/
 
-// add some headers relevant to this job
-k.addHeader('Machine','SWGXYZ');
-k.addHeader('Gauge','15');
+console.log(";!knitout-2");
+console.log(";;Carriers: 1 2 3 4 5 6 7 8 9 10");
 
 // swatch variables
 //height needs to be multiples of 4
@@ -13,9 +13,9 @@ var height = 60;
 //and for this implementation, to avoid knit on the last one tucked on
 //width must be odd
 var width = 47; //want to put first stich on the front bed, hack for now
-var carrier = '6';
+var carrier = '3';
 // bring in carrier using yarn inserting hook
-k.inhook(carrier);
+console.log("inhook " + carrier);
 
 //helper functions for rows
 //row1 follows the pattern of *front front back*front front
@@ -25,11 +25,11 @@ function row1()
     {
       if (i%3 == 0)
       {
-        k.knit("-", "b"+i, carrier);
+        console.log("knit - b" + i + " " + carrier);
       }
       else
       {
-        k.knit("-", "f"+i, carrier);
+        console.log("knit - f" + i + " " + carrier);
       }
     }
 }
@@ -41,11 +41,11 @@ function row2()
     {
       if (i%3 == 0)
       {
-        k.knit("+", "b"+i, carrier);
+        console.log("knit + b" + i + " " + carrier);
       }
       else
       {
-        k.knit("+", "f"+i, carrier);
+        console.log("knit + f" + i + " " + carrier);
       }
     }
 }
@@ -58,18 +58,18 @@ function row3()
     {
       if (i%3 == 0)
       {
-        k.knit("-", "b"+i, carrier);
+        console.log("knit - b" + i + " " + carrier);
       }
       else
       {
-        k.knit("-", "f"+i, carrier);
+        console.log("knit - f" + i + " " + carrier);
       }
     }
     for (var i = width; i > 0 ; i--)
     {
       if (i%3 != 0)
       {
-        k.xfer("f"+i, "b"+i);
+        console.log("xfer f" + i + " b" + i);
       }
     }
 
@@ -81,13 +81,13 @@ function row4()
 {
  for (var i = 1; i <= width ; i++)
     {
-      k.knit("+","b"+i, carrier);
+      console.log("knit + b" + i + " " + carrier);
     }
     for (var i = 1; i <= width ; i++)
     {
       if (i%3 != 0)
       {
-        k.xfer("b"+i, "f"+i);
+        console.log("xfer b" + i + " f" + i);
       }
     }
 }
@@ -98,11 +98,11 @@ for (var s = width ; s>0 ; s--)
   {
     if (s%3 == 0)
     {
-      k.tuck("-", "b"+s, carrier);
+      console.log("tuck - b" + s + " " + carrier);
     }
     else
     {
-      k.tuck("-", "f"+s, carrier);
+      console.log("tuck - f" + s + " " + carrier);
     }
   }
 }
@@ -112,17 +112,17 @@ for (var s = 1 ; s<=width ; s++)
   {
     if (s%3 == 0)
     {
-      k.tuck("+", "b"+s, carrier);
+      console.log("tuck + b" + s + " " + carrier);
     }
     else
     {
-      k.tuck("+", "f"+s, carrier);
+      console.log("tuck + f" + s + " " + carrier);
     }
   }
 }
 
 // release the yarn inserting hook
-k.releasehook(carrier);
+console.log("releasehook " + carrier);
 
 // knit some rows back and forth
 for(var h = 1 ; h <= height ; h = h+4)
@@ -134,8 +134,5 @@ for(var h = 1 ; h <= height ; h = h+4)
 }
 
 // bring the yarn out with the yarn inserting hook
-k.outhook(carrier);
-
-// write the knitout to a file
-k.write('piqueribbing.k');
+console.log("outhook " + carrier);
 

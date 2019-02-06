@@ -19,6 +19,9 @@ xxxx----
 ----xxxx
 */
 
+//Note:
+//We start with squares on the front bed because the machine doesn't like making the first stitch with the back bed.
+
 console.log(";!knitout-2");
 console.log(";;Carriers: 1 2 3 4 5 6 7 8 9 10");
 
@@ -31,23 +34,23 @@ console.log("inhook " + carrier);
 for (let n = max; n >= min; --n) {
 	if ((max-n) % 2 == 0 ) {
 		if ((max-n) % 8 < 4){
-			console.log("tuck - b" + n + " " + carrier);
-		} else {
 			console.log("tuck - f" + n + " " + carrier);
+		} else {
+			console.log("tuck - b" + n + " " + carrier);
 		}
 	}
 }
 for (let n = min; n <= max; ++n) {
 	if ((max-n)%2 == 1) {
 		if ((max-n) % 8 < 4){
-			console.log("tuck + b" + n + " " + carrier);
-		} else {
 			console.log("tuck + f" + n + " " + carrier);
+		} else {
+			console.log("tuck + b" + n + " " + carrier);
 		}
 	}
 }
 
-console.log("miss + f" + max + " " + carrier);
+console.log("miss + b" + max + " " + carrier);
 
 console.log("releasehook " + carrier);
 
@@ -69,9 +72,9 @@ for (let r = 0; r < height; ++r) {
 			counter++;
 
 			if (reversed) {
-				console.log("knit - "  + (isFront ? "f" : "b") + n + " " + carrier);
-			} else {
 				console.log("knit - "  + (isFront ? "b" : "f") + n + " " + carrier);
+			} else {
+				console.log("knit - "  + (isFront ? "f" : "b") + n + " " + carrier);
 			}
 			if (counter % 4 === 0) { isFront = !isFront;}
 		}
@@ -81,9 +84,9 @@ for (let r = 0; r < height; ++r) {
 			counter++;
 
 			if (reversed) {
-				console.log("knit + "  + (isFront ? "f" : "b") + n + " " + carrier);
-			} else {
 				console.log("knit + "  + (isFront ? "b" : "f") + n + " " + carrier);
+			} else {
+				console.log("knit + "  + (isFront ? "f" : "b") + n + " " + carrier);
 			}
 			if (counter % 4 === 0) { isFront = !isFront;}
 		}
@@ -93,9 +96,9 @@ for (let r = 0; r < height; ++r) {
 		if (r % 4 === 3){ //after four rows, transfer stitches from front bed to back and vise verse
 			for (let n = min; n <= max; ++n) {
 				if ((n-1) % 8 < 4){
-					console.log("xfer " + (reversed ? "b" : "f") + n + " " + (reversed ? "f" : "b") + n);
-				} else {
 					console.log("xfer " + (reversed ? "f" : "b") + n + " " + (reversed ? "b" : "f") + n);
+				} else {
+					console.log("xfer " + (reversed ? "b" : "f") + n + " " + (reversed ? "f" : "b") + n);
 				}
 			}
 		}
@@ -103,7 +106,7 @@ for (let r = 0; r < height; ++r) {
 		//on the last row, bring any stitches on the back bed to the front
 		for (let n = min; n <= max; ++n) {
 			if ((n-1) % 8 >= 4){
-				console.log("xfer b" + n + " f" + n);
+				console.log("xfer f" + n + " b" + n);
 			} 
 		}
 	}
