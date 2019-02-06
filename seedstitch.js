@@ -9,7 +9,7 @@ console.log(";;Carriers: 1 2 3 4 5 6 7 8 9 10");
 // swatch variables
 var height = 30;
 var width = 41;
-var carrier = '6';
+var carrier = '3';
 
 // make sure the very first stitch in on the front bed,
 // since the machine complains if its on the back

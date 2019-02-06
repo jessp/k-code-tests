@@ -1,10 +1,5 @@
-//import the knitout writer code and instantiate it as an object
-var knitout = require('../../knitout-frontend-js/knitout');
-k = new knitout.Writer({carriers:['1', '2', '3', '4', '5', '6', '7', '8']});
-
-// add some headers relevant to this job
-k.addHeader('Machine','SWGXYZ');
-k.addHeader('Gauge','15');
+console.log(";!knitout-2");
+console.log(";;Carriers: 1 2 3 4 5 6 7 8 9 10");
 
 // swatch variables
 //height needs to be multiples of 4
@@ -13,9 +8,9 @@ var height = 40;
 //and for this implementation to avoid knit on the last one tucked on
 //width must be even
 var width = 40;
-var carrier = '6';
+var carrier = '3';
 // bring in carrier using yarn inserting hook
-k.inhook(carrier);
+console.log("inhook " + carrier);
 
 //helper functions for rows
 function row1()
@@ -24,11 +19,11 @@ function row1()
   {
     if (s%3!=1)
     {
-      k.knit("-", "b"+s, carrier);
+      console.log("knit - b" + s + " " + carrier);
     }
     else
     {
-      k.knit("-", "f"+s, carrier);
+      console.log("knit - f" + s + " " + carrier);
     }
   }
 }
@@ -39,18 +34,18 @@ function row2()
   {
     if (s%3!=1)
     {
-      k.knit("+", "b"+s, carrier);
+      console.log("knit + b" + s + " " + carrier);
     }
     else
     {
-      k.knit("+", "f"+s, carrier);
+      console.log("knit + f" + s + " " + carrier);
     }
   }
   for (var s = width; s>0; s--)
   {
     if (s%3!=1)
     {
-      k.xfer("b"+s, "f"+s);
+      console.log("xfer b" + s + " f" + s);
     }
   }
 }
@@ -59,7 +54,7 @@ function row3()
 {
   for (var s=width; s>0; s--)
   {
-      k.knit("-", "f"+s, carrier);
+    console.log("knit - f" + s + " " + carrier);
   }
 }
 
@@ -67,13 +62,13 @@ function row4()
 {
   for (var s=1; s<=width; s++)
   {
-      k.knit("+", "f"+s, carrier);
+    console.log("knit + f" + s + " " + carrier);
   }
   for (var s=width; s>0; s--)
   {
     if (s%3!=1)
     {
-      k.xfer("f"+s, "b"+s);
+      console.log("xfer f" + s + " b" + s);
     }
   }
  }
@@ -86,11 +81,11 @@ for (var s = width ; s>0 ; s--)
   {
     if (s%3 != 1)
     {
-      k.tuck("-", "b"+s, carrier);
+      console.log("tuck - b" + s + " " + carrier);
     }
     else
     {
-      k.tuck("-", "f"+s, carrier);
+      console.log("tuck - f" + s + " " + carrier);
     }
   }
 }
@@ -101,17 +96,17 @@ for (var s = 1 ; s<=width ; s++)
   {
     if (s%3 != 1)
     {
-      k.tuck("+", "b"+s, carrier);
+      console.log("tuck + b" + s + " " + carrier);
     }
     else
     {
-      k.tuck("+", "f"+s, carrier);
+      console.log("tuck + f" + s + " " + carrier);
     }
   }
 }
 
 // release the yarn inserting hook
-k.releasehook(carrier);
+console.log("releasehook " + carrier);
 
 for(var h = 1 ; h <= height ; h = h+4)
 {
@@ -122,7 +117,4 @@ for(var h = 1 ; h <= height ; h = h+4)
 }
 
 // bring the yarn out with the yarn inserting hook
-k.outhook(carrier);
-
-// write the knitout to a file
-k.write('../../swatches/wafflestitch.k');
+console.log("outhook " + carrier);

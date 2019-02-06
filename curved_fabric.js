@@ -1,12 +1,13 @@
 //Parameters:
 
 const width = 12;
-const height = Math.min(width/stepWidth) * rowsPerStep * numCurves; //calculate the height based on other parameters
 const carrier = "3";
 
 let rowsPerStep = 2; //how many rows knitted at each stepWidth. Pretty sure this has to be a multiple of 2
 let stepWidth = 4; //how many rows we decrease per step
 let numCurves = 6; //number of triangles we want to make
+const height = Math.min(width/stepWidth) * rowsPerStep * numCurves; //calculate the height based on other parameters
+
 
 //Operation:
 
