@@ -3,7 +3,7 @@ let kCode = "";
 
 //Parameters:
 
-const width = 30;
+const width = 31;//odd, so we begin and end on knit-front
 const height = 40;
 const carrier = "3";
 
@@ -49,34 +49,18 @@ for (let r = 0; r < height; ++r) {
 		for (let n = max; n >= min; --n) {
 			//alternate between front knits and back tucks on alternating rows going towards the left
 			if (n % 2 === 0){
-				kCode += ("knit - f" + n + " " + carrier + "\n");
+				kCode += ("knit - b" + n + " " + carrier + "\n");
 			} else {
-				kCode += ("tuck - b" + n + " " + carrier + "\n");
-			}
-		}
-		//after the last row of stitches, transfer any stitches on the back bed to the front
-		if (r === (height - 1)){
-			for (let xf = max; n >= min; --xf) {
-				if (xf % 2 === 0){
-					kCode += ("xfer b" + xf + " f" + xf + "\n");
-				}
+				kCode += ("knit - f" + n + " " + carrier + "\n");
 			}
 		}
 	} else {
 		for (let n = min; n <= max; ++n) {
 			if (n % 2 === 1){
 				//alternate between front knits and back knits on alternating rows going towards the left
-				kCode += ("knit + b" + n + " " + carrier + "\n");
-			} else {
 				kCode += ("knit + f" + n + " " + carrier + "\n");
-			}
-		}
-		//after the last row of stitches, transfer any stitches on the back bed to the front
-		if (r === (height - 1)){
-			for (let xf = min; xf <= max; ++xf) {
-				if (xf % 2 === 1){
-					kCode += ("xfer b" + xf + " f" + xf + "\n");
-				}
+			} else {
+				kCode += ("tuck + b" + n + " " + carrier + "\n");
 			}
 		}
 	}
