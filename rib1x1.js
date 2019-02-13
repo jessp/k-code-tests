@@ -24,18 +24,12 @@ for (var s=width; s>0; s--) {
 	if(s%2==front) {
 		kCode += ("tuck - f" + s + " " + carrier + "\n");
 	}
-	else {
-		kCode += ("tuck - b" + s + " " + carrier + "\n");
-	}
 }
 
 //knit the tucked on stitches, making sure to skip the one we just tucked
-for (var s=2; s<=width; s++) {
-	if (s%2==front) {
-		kCode += ("knit + f" + s + " " + carrier + "\n");
-	}
-	else {
-		kCode += ("knit + b" + s + " " + carrier + "\n");
+for (var s=0; s<=width; s++) {
+	if (s%2!=front) {
+		kCode += ("tuck + b" + s + " " + carrier + "\n");
 	}
 }
 

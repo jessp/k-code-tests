@@ -57,7 +57,7 @@ for (let n = min; n <= max; ++n) {
 	}
 }
 
-kCode += ("miss + f" + max + " " + carrier2 + "\n");
+kCode += ("miss + b" + max + " " + carrier2 + "\n");
 
 kCode += ("releasehook " + carrier2 + "\n");
 

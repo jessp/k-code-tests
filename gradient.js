@@ -31,23 +31,23 @@ kCode += ("inhook " + carrier + "\n");
 for (let n = max; n >= min; --n) {
 	if ((max-n) % 2 == 0) {
 		if (columnPos[n - 1] === 0) {
-			kCode += ("tuck - f" + n + " " + carrier + "\n");
-		} else{
 			kCode += ("tuck - b" + n + " " + carrier + "\n");
+		} else{
+			kCode += ("tuck - f" + n + " " + carrier + "\n");
 		}
 	}
 }
 for (let n = min; n <= max; ++n) {
 	if ((max-n)%2 == 1) {
 		if (columnPos[n - 1] === 0) {
-			kCode += ("tuck + f" + n + " " + carrier + "\n");
-		} else{
 			kCode += ("tuck + b" + n + " " + carrier + "\n");
+		} else{
+			kCode += ("tuck + f" + n + " " + carrier + "\n");
 		}
 	}
 }
 
-kCode += ("miss + f" + max + " " + carrier + "\n");
+kCode += ("miss + b" + max + " " + carrier + "\n");
 
 //release the yarn from the carrier hook
 kCode += ("releasehook " + carrier + "\n");
@@ -61,11 +61,11 @@ while (current_height < height) {
 		//our column indexes start from 0 so we need to subtract 1
 		if (columnPos[s - 1] === 0) {
 			//knit back side
-			kCode += ("knit - f" + s + " " + carrier + "\n");
+			kCode += ("knit - b" + s + " " + carrier + "\n");
 		}
 		else {
 			//knit front side
-			kCode += ("knit - b" + s + " " + carrier + "\n");
+			kCode += ("knit - f" + s + " " + carrier + "\n");
 		}
 	}
 	current_height++;
@@ -73,10 +73,10 @@ while (current_height < height) {
 	//left to right
 	for (let s=1; s<=max; s++) {
 		if (columnPos[s - 1] === 0) {
-			kCode += ("knit + f" + s + " " + carrier + "\n");
+			kCode += ("knit + b" + s + " " + carrier + "\n");
 		}
 		else {
-			kCode += ("knit + b" + s + " " + carrier + "\n");
+			kCode += ("knit + f" + s + " " + carrier + "\n");
 		}
 	}
 	current_height++;
@@ -84,7 +84,7 @@ while (current_height < height) {
 
 //transfer any stitches on the back bed onto the front bed
 for (let s=1; s<=max; s++) {
-	if (columnPos[s - 1] === 1) {
+	if (columnPos[s - 1] === 0) {
 		kCode += ("xfer b" + s + " f" + s + "\n");
 	}
 }
