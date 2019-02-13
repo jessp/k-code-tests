@@ -24,7 +24,7 @@ kCode += (";;Carriers: 1 2 3 4 5 6 7 8 9 10" + "\n");
 
 kCode += ("inhook " + Carrier + "\n");
 
-kCode += ("x-stitch-number 61"); //in our table: "Half / Wrap" for Po + "\n"lo
+kCode += ("x-stitch-number 61" + "\n"); //in our table: "Half / Wrap" for Polo
 
 let min = 1;
 let max = min + Width - 1;

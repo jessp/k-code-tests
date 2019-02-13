@@ -38,7 +38,7 @@ for (let n = min; n <= max; ++n) {
 	}
 }
 
-kCode += ("x-stitch-number " + 95); //might be better than 6 + "\n"8?
+kCode += ("x-stitch-number " + 95 + "\n"); //might be better than 68?
 for (let n = max; n >= min; --n) {
 	kCode += ("knit - f" + n + " " + Carrier + "\n");
 }

@@ -106,11 +106,7 @@ function row4()
 //tuck on all needles
 for (var s=width; s>0; s--)
 {
-  if(s%2==0)
-  {
-    kCode += ("tuck - b" + s + " " + carrier + "\n");
-  }
-  else
+  if(s%2==1)
   {
     kCode += ("tuck - f" + s + " " + carrier + "\n");
   }
@@ -121,11 +117,7 @@ for (var s=2; s<=width; s++)
 {
   if (s%2==0)
   {
-    kCode += ("knit + b" + s + " " + carrier + "\n");
-  }
-  else
-  {
-    kCode += ("knit + f" + s + " " + carrier + "\n");
+    kCode += ("tuck + b" + s + " " + carrier + "\n");
   }
 }
 
