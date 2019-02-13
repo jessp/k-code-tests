@@ -88,7 +88,7 @@ while (current_height < height) {
 			if (random_indexes[current_height][n - 1] !== random_indexes[current_height - 1][n - 1]){ 
 				let from_back = random_indexes[current_height][n - 1] === "b";
 				//transfer to opposite beds as needed
-				kCode += ("xfer " + (from_back ? "b" : "f") + n + " " + (from_back ? "f" : "b") +  n + "\n");
+				kCode += ("xfer " + (from_back ? "f" : "b") + n + " " + (from_back ? "b" : "f") +  n + "\n");
 			}
 		}
 	}
