@@ -52,7 +52,33 @@ kCode += ("miss + f" + max + " " + carrier + "\n");
 //release the yarn from the carrier hook
 kCode += ("releasehook " + carrier + "\n");
 
+//direction is important, so let's start with two lines of plain knitting
+for (let n = actingWidth; n >= min; --n) {
+	kCode += ("knit - f" + n + " " + carrier + "\n");
+}
+for (let n = min; n <= actingWidth; ++n) {
+	kCode += ("knit + f" + n + " " + carrier + "\n");
+}
+
 for (let r = 0; r < height; ++r) {
+
+	//if we should decrease the width
+	if (actingWidth > endingWidth){
+		//and we're going towards the left, we're going to attempt to secure some stitches
+		if (r % 2 == 0){
+			//first, transfer them to the back bed
+			kCode += ("xfer f" + actingWidth + " b" + actingWidth + "\n");
+			//then move the back bed left one space
+			kCode += ("rack -1" + "\n");
+			//then transfer the stitch back to the front
+			kCode += ("xfer b" + actingWidth + " f" + (actingWidth - 1) + "\n");
+			//and return the back bed to its starting position
+			kCode += ("rack 0" + "\n");
+
+			actingWidth--;
+		}
+	}
+
 	//knit normally, alternating between back and front
 	if (r % 2 == 0) {
 		for (let n = actingWidth; n >= min; --n) {
@@ -63,21 +89,7 @@ for (let r = 0; r < height; ++r) {
 			kCode += ("knit + f" + n + " " + carrier + "\n");
 		}
 	}
-	//if we should decrease the width
-	if (actingWidth > endingWidth){
-		//and we're going towards the right, we're going to attempt to secure some stitches
-		if (r % 2 == 1){
-			//first, transfer them to the back bed
-			kCode += ("xfer f" + actingWidth + " b" + actingWidth + "\n");
-			//then move the back bed left one space
-			kCode += ("rack -1" + "\n");
-			//then transfer the stitch back to the front
-			kCode += ("xfer b" + actingWidth + " f" + (actingWidth - 1) + "\n");
-			//and return the back bed to its starting position
-			kCode += ("rack 0" + "\n");
-		}
-		actingWidth--;
-	}
+
 }
 
 kCode += ("outhook " + carrier + "\n");
