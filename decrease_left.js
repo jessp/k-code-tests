@@ -55,16 +55,7 @@ kCode += ("releasehook " + carrier + "\n");
 
 
 for (let r = 0; r < height; ++r) {
-	//knit normally, alternating between back and front
-	if (r % 2 == 0) {
-		for (let n = max; n >= actingWidth; --n) {
-			kCode += ("knit - f" + n + " " + carrier + "\n");
-		}
-	} else {
-		for (let n = actingWidth; n <= max; ++n) {
-			kCode += ("knit + f" + n + " " + carrier + "\n");
-		}
-	}
+
 	//if we should decrease the width
 	if (actingWidth < endingWidth){
 		//and we're going towards the right, we're going to attempt to secure some stitches
@@ -77,8 +68,19 @@ for (let r = 0; r < height; ++r) {
 			kCode += ("xfer b" + actingWidth + " f" + (actingWidth + 1) + "\n");
 			//and return the back bed to its starting position
 			kCode += ("rack 0" + "\n");
+			actingWidth++;
 		}
-		actingWidth++;
+	}
+
+	//knit normally, alternating between back and front
+	if (r % 2 == 0) {
+		for (let n = max; n >= actingWidth; --n) {
+			kCode += ("knit - f" + n + " " + carrier + "\n");
+		}
+	} else {
+		for (let n = actingWidth; n <= max; ++n) {
+			kCode += ("knit + f" + n + " " + carrier + "\n");
+		}
 	}
 }
 

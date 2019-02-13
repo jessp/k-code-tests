@@ -48,7 +48,11 @@ kCode += ("inhook " + carrier2 + "\n");
 
 for (let n = max; n >= min; --n) {
 	if ((max-n) % 2 == 0) {
-		kCode += ("tuck - b" + n + " " + carrier2 + "\n");
+		if (n == max){
+			kCode += ("tuck - f" + n + " " + carrier2 + "\n");
+		} else {
+			kCode += ("tuck - b" + n + " " + carrier2 + "\n");
+		}
 	}
 }
 for (let n = min; n <= max; ++n) {
