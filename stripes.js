@@ -1,3 +1,6 @@
+const fs = require('fs');
+let kCode = "";
+
 //Parameters:
 
 const width = 30;
@@ -17,50 +20,50 @@ let min = 1;
 let max = min + width - 1;
 
 
-console.log(";!knitout-2");
-console.log(";;Carriers: 1 2 3 4 5 6 7 8 9 10");
+kCode += (";!knitout-2" + "\n");
+kCode += (";;Carriers: 1 2 3 4 5 6 7 8 9 10" + "\n");
 
 //Alternating tucks cast-on with carrier 1:
-console.log("inhook " + carrier1);
+kCode += ("inhook " + carrier1 + "\n");
 
 
 for (let n = max; n >= min; --n) {
 	if ((max-n) % 2 == 0) {
-		console.log("tuck - f" + n + " " + carrier1);
+		kCode += ("tuck - f" + n + " " + carrier1 + "\n");
 	}
 }
 for (let n = min; n <= max; ++n) {
 	if ((max-n)%2 == 1) {
-		console.log("tuck + f" + n + " " + carrier1);
+		kCode += ("tuck + f" + n + " " + carrier1 + "\n");
 	}
 }
 
-console.log("miss + f" + max + " " + carrier1);
+kCode += ("miss + f" + max + " " + carrier1 + "\n");
 
-console.log("releasehook " + carrier1);
+kCode += ("releasehook " + carrier1 + "\n");
 
 //knit one two lines with carrier1
 for (let n = max; n >= min; --n) {
-	console.log("knit - f" + n + " " + carrier1);
+	kCode += ("knit - f" + n + " " + carrier1 + "\n");
 }
 
 for (let n = min; n <= max; ++n) {
-	console.log("knit + f" + n + " " + carrier1);
+	kCode += ("knit + f" + n + " " + carrier1 + "\n");
 }
 
 //load on carrier 2
-console.log("inhook " + carrier2);
+kCode += ("inhook " + carrier2 + "\n");
 
 //knit two rows with carrier 2 to put the thread into play
 for (let n = max; n >= min; --n) {
-	console.log("knit - f" + n + " " + carrier2);
+	kCode += ("knit - f" + n + " " + carrier2 + "\n");
 }
 for (let n = min; n <= max; ++n) {
-	console.log("knit + f" + n + " " + carrier2);
+	kCode += ("knit + f" + n + " " + carrier2 + "\n");
 }
 
 //release yarn on carrier 2 from the carrier hook
-console.log("releasehook " + carrier2);
+kCode += ("releasehook " + carrier2 + "\n");
 
 // Rows of plain knitting:
 let active_carrier = carrier1;
@@ -70,31 +73,38 @@ for (let r = 0; r < height; ++r) {
 
 	if (r % 2 == 0) {
 		for (let n = max; n >= min; --n) {
-			console.log("knit - f" + n + " " + active_carrier);
+			kCode += ("knit - f" + n + " " + active_carrier + "\n");
 		}
 	} else {
 		for (let n = min; n <= max; ++n) {
-			console.log("knit + f" + n + " " + active_carrier);
+			kCode += ("knit + f" + n + " " + active_carrier + "\n");
 		}
 	}
 }
 
 //take carrier 2 out of play
-console.log("outhook " + carrier2);
+kCode += ("outhook " + carrier2 + "\n");
 
 //knit a few more lines with carrier 1 -- is this necessary?
 for (let n = max; n >= min; --n) {
-	console.log("knit - f" + n + " " + carrier1);
+	kCode += ("knit - f" + n + " " + carrier1 + "\n");
 }
 for (let n = min; n <= max; ++n) {
-	console.log("knit + f" + n + " " + carrier1);
+	kCode += ("knit + f" + n + " " + carrier1 + "\n");
 }
 for (let n = max; n >= min; --n) {
-	console.log("knit - f" + n + " " + carrier1);
+	kCode += ("knit - f" + n + " " + carrier1 + "\n");
 }
 
 //take carrier 1 out of play
-console.log("outhook " + carrier1);
+kCode += ("outhook " + carrier1 + "\n");
 
 
+//write to file
+fs.writeFile("./../knitout-backend-swg/examples/in/stripes.knitout", kCode, function(err) {
+    if(err) {
+        return console.log(err);
+    }
 
+    console.log("The file was saved!");
+}); 

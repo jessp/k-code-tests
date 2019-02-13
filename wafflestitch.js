@@ -1,5 +1,8 @@
-console.log(";!knitout-2");
-console.log(";;Carriers: 1 2 3 4 5 6 7 8 9 10");
+const fs = require('fs');
+let kCode = "";
+
+kCode += (";!knitout-2" + "\n");
+kCode += (";;Carriers: 1 2 3 4 5 6 7 8 9 10" + "\n");
 
 // swatch variables
 //height needs to be multiples of 4
@@ -10,7 +13,7 @@ var height = 40;
 var width = 40;
 var carrier = '3';
 // bring in carrier using yarn inserting hook
-console.log("inhook " + carrier);
+kCode += ("inhook " + carrier + "\n");
 
 //helper functions for rows
 function row1()
@@ -19,11 +22,11 @@ function row1()
   {
     if (s%3!=1)
     {
-      console.log("knit - b" + s + " " + carrier);
+      kCode += ("knit - b" + s + " " + carrier + "\n");
     }
     else
     {
-      console.log("knit - f" + s + " " + carrier);
+      kCode += ("knit - f" + s + " " + carrier + "\n");
     }
   }
 }
@@ -34,18 +37,18 @@ function row2()
   {
     if (s%3!=1)
     {
-      console.log("knit + b" + s + " " + carrier);
+      kCode += ("knit + b" + s + " " + carrier + "\n");
     }
     else
     {
-      console.log("knit + f" + s + " " + carrier);
+      kCode += ("knit + f" + s + " " + carrier + "\n");
     }
   }
   for (var s = width; s>0; s--)
   {
     if (s%3!=1)
     {
-      console.log("xfer b" + s + " f" + s);
+      kCode += ("xfer b" + s + " f" + s + "\n");
     }
   }
 }
@@ -54,7 +57,7 @@ function row3()
 {
   for (var s=width; s>0; s--)
   {
-    console.log("knit - f" + s + " " + carrier);
+    kCode += ("knit - f" + s + " " + carrier + "\n");
   }
 }
 
@@ -62,13 +65,13 @@ function row4()
 {
   for (var s=1; s<=width; s++)
   {
-    console.log("knit + f" + s + " " + carrier);
+    kCode += ("knit + f" + s + " " + carrier + "\n");
   }
   for (var s=width; s>0; s--)
   {
     if (s%3!=1)
     {
-      console.log("xfer f" + s + " b" + s);
+      kCode += ("xfer f" + s + " b" + s + "\n");
     }
   }
  }
@@ -81,11 +84,11 @@ for (var s = width ; s>0 ; s--)
   {
     if (s%3 != 1)
     {
-      console.log("tuck - b" + s + " " + carrier);
+      kCode += ("tuck - b" + s + " " + carrier + "\n");
     }
     else
     {
-      console.log("tuck - f" + s + " " + carrier);
+      kCode += ("tuck - f" + s + " " + carrier + "\n");
     }
   }
 }
@@ -96,17 +99,17 @@ for (var s = 1 ; s<=width ; s++)
   {
     if (s%3 != 1)
     {
-      console.log("tuck + b" + s + " " + carrier);
+      kCode += ("tuck + b" + s + " " + carrier + "\n");
     }
     else
     {
-      console.log("tuck + f" + s + " " + carrier);
+      kCode += ("tuck + f" + s + " " + carrier + "\n");
     }
   }
 }
 
 // release the yarn inserting hook
-console.log("releasehook " + carrier);
+kCode += ("releasehook " + carrier + "\n");
 
 for(var h = 1 ; h <= height ; h = h+4)
 {
@@ -117,4 +120,13 @@ for(var h = 1 ; h <= height ; h = h+4)
 }
 
 // bring the yarn out with the yarn inserting hook
-console.log("outhook " + carrier);
+kCode += ("outhook " + carrier + "\n");
+
+//write to file
+fs.writeFile("./../knitout-backend-swg/examples/in/wafflestitch.knitout", kCode, function(err) {
+    if(err) {
+        return console.log(err);
+    }
+
+    console.log("The file was saved!");
+}); 

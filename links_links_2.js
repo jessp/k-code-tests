@@ -1,3 +1,6 @@
+const fs = require('fs');
+let kCode = "";
+
 //Parameters:
 
 const width = 32;//multiple of 8
@@ -20,13 +23,13 @@ xxxx----
 //We start with squares on the front bed because the machine doesn't like making the first stitch with the back bed.
 
 
-console.log(";!knitout-2");
-console.log(";;Carriers: 1 2 3 4 5 6 7 8 9 10");
+kCode += (";!knitout-2" + "\n");
+kCode += (";;Carriers: 1 2 3 4 5 6 7 8 9 10" + "\n");
 
 
 //Alternating tucks cast-on:
 
-console.log("inhook " + carrier);
+kCode += ("inhook " + carrier + "\n");
 
 let min = 1;
 let max = min + width - 1;
@@ -35,25 +38,25 @@ let max = min + width - 1;
 for (let n = max; n >= min; --n) {
 	if ((max-n) % 2 == 0 ) {
 		if ((max-n) % 8 < 4){
-			console.log("tuck - f" + n + " " + carrier);
+			kCode += ("tuck - f" + n + " " + carrier + "\n");
 		} else {
-			console.log("tuck - b" + n + " " + carrier);
+			kCode += ("tuck - b" + n + " " + carrier + "\n");
 		}
 	}
 }
 for (let n = min; n <= max; ++n) {
 	if ((max-n)%2 == 1) {
 		if ((max-n) % 8 < 4){
-			console.log("tuck + f" + n + " " + carrier);
+			kCode += ("tuck + f" + n + " " + carrier + "\n");
 		} else {
-			console.log("tuck + b" + n + " " + carrier);
+			kCode += ("tuck + b" + n + " " + carrier + "\n");
 		}
 	}
 }
 
-console.log("miss + b" + max + " " + carrier);
+kCode += ("miss + b" + max + " " + carrier + "\n");
 
-console.log("releasehook " + carrier);
+kCode += ("releasehook " + carrier + "\n");
 
 
 let reversed = true;//every 5th and 6th row, all stitches in a row are on the front bed
@@ -70,9 +73,9 @@ for (let r = 0; r < height; ++r) {
 			counter++;
 
 			if (reversed) {
-				console.log("knit - "  + (isFront ? "b" : "f") + n + " " + carrier);
+				kCode += ("knit - "  + (isFront ? "b" : "f") + n + " " + carrier + "\n");
 			} else {
-				console.log("knit - f" + n + " " + carrier);
+				kCode += ("knit - f" + n + " " + carrier + "\n");
 			}
 			//every four stitches, alternate between front and back stitches
 			if (counter % 4 === 0) { isFront = !isFront;} 
@@ -83,9 +86,9 @@ for (let r = 0; r < height; ++r) {
 			counter++;
 
 			if (reversed) {
-				console.log("knit + "  + (isFront ? "f" : "b") + n + " " + carrier);
+				kCode += ("knit + "  + (isFront ? "f" : "b") + n + " " + carrier + "\n");
 			} else {
-				console.log("knit + f" + n + " " + carrier);
+				kCode += ("knit + f" + n + " " + carrier + "\n");
 			}
 			//every four stitches, alternate between front and back stitches
 			if (counter % 4 === 0) { isFront = !isFront;}
@@ -96,13 +99,13 @@ for (let r = 0; r < height; ++r) {
 		if (r % 6 === 3){ //after four rows, transfer relevent stitches from back bed to front
 			for (let n = min; n <= max; ++n) {
 				if ((n-1) % 8 < 4){
-					console.log("xfer b" + n + " f" + n);
+					kCode += ("xfer b" + n + " f" + n + "\n");
 				} 
 			}
 		} else if (r % 6 === 5){
 			for (let n = min; n <= max; ++n) {
 				if ((n-1) % 8 < 4){
-					console.log("xfer f" + n + " b" + n);
+					kCode += ("xfer f" + n + " b" + n + "\n");
 				} 
 			}
 		}
@@ -110,11 +113,20 @@ for (let r = 0; r < height; ++r) {
 		//on the last row, bring any stitches on the back bed to the front
 		for (let n = min; n <= max; ++n) {
 			if ((n-1) % 8 < 4){
-				console.log("xfer b" + n + " f" + n);
+				kCode += ("xfer b" + n + " f" + n + "\n");
 			} 
 		}
 	}
 
 }
 
-console.log("outhook " + carrier);
+kCode += ("outhook " + carrier + "\n");
+
+//write to file
+fs.writeFile("./../knitout-backend-swg/examples/in/links_links_2.knitout", kCode, function(err) {
+    if(err) {
+        return console.log(err);
+    }
+
+    console.log("The file was saved!");
+}); 

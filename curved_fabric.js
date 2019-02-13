@@ -1,3 +1,6 @@
+const fs = require('fs');
+let kCode = "";
+
 //Parameters:
 
 const width = 12;
@@ -41,10 +44,10 @@ xxxxx
 */
 
 
-console.log(";!knitout-2");
-console.log(";;Carriers: 1 2 3 4 5 6 7 8 9 10");
+kCode += (";!knitout-2" + "\n");
+kCode += (";;Carriers: 1 2 3 4 5 6 7 8 9 10" + "\n");
 
-console.log("inhook " + carrier);
+kCode += ("inhook " + carrier + "\n");
 
 
 let min = 1;
@@ -53,24 +56,24 @@ let max = min + width - 1;
 //alternating tucks cast-on
 for (let column = max; column >= min; --column) {
 	if ((max - column) % 2 == 0) {
-		console.log("tuck - f" + column + " " + carrier);
+		kCode += ("tuck - f" + column + " " + carrier + "\n");
 	}
 }
 for (let column = min; column <= max; ++column) {
 	if ((max - column)%2 == 1) {
-		console.log("tuck + f" + column + " " + carrier);
+		kCode += ("tuck + f" + column + " " + carrier + "\n");
 	}
 }
 
-console.log("miss + f" + max + " " + carrier);
+kCode += ("miss + f" + max + " " + carrier + "\n");
 
 //release the hook from the carrier hook
-console.log("releasehook " + carrier);
+kCode += ("releasehook " + carrier + "\n");
 
 
 //direction is important, so let's start with a row knitting towards the left to put us in the correct direction
 for (let column = max; column >= min; --column) {
-	console.log("knit - f" + column + " " + carrier);
+	kCode += ("knit - f" + column + " " + carrier + "\n");
 }
 
 //for each curved segment...
@@ -86,11 +89,11 @@ for (let curve = 0; curve < numCurves; curve ++) {
 			//direction is important, so we want to start our first row in the curve going right (+)
 			if (row % 2 == 1) {
 				for (let column = rowWidth; column >= min; --column) {
-					console.log("knit - f" + column + " " + carrier);
+					kCode += ("knit - f" + column + " " + carrier + "\n");
 				}
 			} else {
 				for (let column = min; column <= rowWidth; ++column) {
-					console.log("knit + f" + column + " " + carrier);
+					kCode += ("knit + f" + column + " " + carrier + "\n");
 				}
 			}
 		}
@@ -98,4 +101,13 @@ for (let curve = 0; curve < numCurves; curve ++) {
 }
 
 //bring yarn carrier out of action
-console.log("outhook " + carrier);
+kCode += ("outhook " + carrier + "\n");
+
+//write to file
+fs.writeFile("./../knitout-backend-swg/examples/in/curved_fabric.knitout", kCode, function(err) {
+    if(err) {
+        return console.log(err);
+    }
+
+    console.log("The file was saved!");
+}); 

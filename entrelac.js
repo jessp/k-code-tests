@@ -3,6 +3,9 @@ Not my code. From Textiles Lab at: https://github.com/textiles-lab/knitout-examp
 Modified only to change carriers and to remove top couple lines
 */
 
+const fs = require('fs');
+let kCode = "";
+
 let height = 19; //height of square
 let width = Math.floor(height/2); //width of each square
 let reps = 2; //how many squares in each row
@@ -15,51 +18,51 @@ let max = min + (2*reps+1)*(width);
 
 let xfer_inside = true; //if true, slant rows inside the squares
 
-console.log(";!knitout-2");
-console.log(";;Carriers: 1 2 3 4 5 6 7 8 9 10");
+kCode += (";!knitout-2" + "\n");
+kCode += (";;Carriers: 1 2 3 4 5 6 7 8 9 10" + "\n");
 
-console.log("inhook " + Carrier);
+kCode += ("inhook " + Carrier + "\n");
 
-console.log("x-stitch-number " + 67);
+kCode += ("x-stitch-number " + 67 + "\n");
 
 for (let n = max; n >= min; --n) {
 	if ((max-n) % 2 == 0) {
-		console.log("tuck - f" + n + " " + Carrier);
+		kCode += ("tuck - f" + n + " " + Carrier + "\n");
 	}
 }
 for (let n = min; n <= max; ++n) {
 	if ((max-n)%2 == 1) {
-		console.log("tuck + f" + n + " " + Carrier);
+		kCode += ("tuck + f" + n + " " + Carrier + "\n");
 	} else if (n === max) {
-		console.log("miss + f" + n + " " + Carrier);
+		kCode += ("miss + f" + n + " " + Carrier + "\n");
 	}
 }
 
-console.log("x-stitch-number " + 95); //might be better than 68?
+kCode += ("x-stitch-number " + 95); //might be better than 6 + "\n"8?
 for (let n = max; n >= min; --n) {
-	console.log("knit - f" + n + " " + Carrier);
+	kCode += ("knit - f" + n + " " + Carrier + "\n");
 }
-console.log("releasehook " + Carrier);
+kCode += ("releasehook " + Carrier + "\n");
 for (let row = 0; row < padding; row += 2) {
 	for (let n = min; n <= max; ++n) {
-		console.log("knit + f" + n + " " + Carrier);
+		kCode += ("knit + f" + n + " " + Carrier + "\n");
 	}
 	for (let n = max; n >= min; --n) {
-		console.log("knit - f" + n + " " + Carrier);
+		kCode += ("knit - f" + n + " " + Carrier + "\n");
 	}
 }
 
 if (Carrier2) {
-	console.log("inhook " + Carrier2);
+	kCode += ("inhook " + Carrier2 + "\n");
 	for (let n = min; n <= max; ++n) {
-		console.log("knit + f" + n + " " + Carrier2);
+		kCode += ("knit + f" + n + " " + Carrier2 + "\n");
 	}
-	console.log("releasehook " + Carrier2);
+	kCode += ("releasehook " + Carrier2 + "\n");
 	for (let n = max; n >= min; --n) {
-		console.log("knit - f" + n + " " + Carrier2);
+		kCode += ("knit - f" + n + " " + Carrier2 + "\n");
 	}
 	for (let n = min; n <= max; ++n) {
-		console.log("knit + f" + n + " " + Carrier2);
+		kCode += ("knit + f" + n + " " + Carrier2 + "\n");
 	}
 }
 
@@ -78,24 +81,24 @@ function rightSquare(min) {
 		if (row + 1 === width) right -= 1;
 		if (row % 2 === 0) {
 			if (xfer_inside && row > 0) {
-				console.log("rack -1");
+				kCode += ("rack -1" + "\n");
 				for (let n = left-1; n <= right-1; ++n) {
-					console.log("xfer f" + n + " b" + (n+1));
+					kCode += ("xfer f" + n + " b" + (n+1) + "\n");
 				}
-				console.log("rack 0");
+				kCode += ("rack 0" + "\n");
 				for (let n = left-1; n <= right; ++n) {
-					console.log("xfer b" + n + " f" + n);
+					kCode += ("xfer b" + n + " f" + n + "\n");
 				}
 			}
 			for (let n = left; n <= right; ++n) {
-				console.log("knit + f" + n + " " + Carrier);
+				kCode += ("knit + f" + n + " " + Carrier + "\n");
 			}
 		} else {
 			for (let n = right; n >= left; --n) {
 				if (xfer_inside && n == left) {
-					console.log("split - f" + n + " b" + n + " " + Carrier);
+					kCode += ("split - f" + n + " b" + n + " " + Carrier + "\n");
 				} else {
-					console.log("knit - f" + n + " " + Carrier);
+					kCode += ("knit - f" + n + " " + Carrier + "\n");
 				}
 			}
 		}
@@ -116,11 +119,11 @@ function rightTriangle(min) {
 		if (row + 1 === height) right -= 1;
 		if (row % 2 === 0) {
 			for (let n = left; n <= right; ++n) {
-				console.log("knit + f" + n + " " + Carrier);
+				kCode += ("knit + f" + n + " " + Carrier + "\n");
 			}
 		} else {
 			for (let n = right; n >= left; --n) {
-				console.log("knit - f" + n + " " + Carrier);
+				kCode += ("knit - f" + n + " " + Carrier + "\n");
 			}
 		}
 	}
@@ -142,25 +145,25 @@ function leftSquare(max) {
 		if (row + 1 === width) left += 1;
 		if (row % 2 === 0) {
 			if (xfer_inside && row > 0) {
-				console.log("rack 1");
+				kCode += ("rack 1" + "\n");
 				for (let n = right+1; n >= left+1; --n) {
-					console.log("xfer f" + n + " b" + (n-1));
+					kCode += ("xfer f" + n + " b" + (n-1) + "\n");
 				}
-				console.log("rack 0");
+				kCode += ("rack 0" + "\n");
 				for (let n = right+1; n >= left; --n) {
-					console.log("xfer b" + n + " f" + n);
+					kCode += ("xfer b" + n + " f" + n + "\n");
 				}
 			}
 
 			for (let n = right; n >= left; --n) {
-				console.log("knit - f" + n + " " + C);
+				kCode += ("knit - f" + n + " " + C + "\n");
 			}
 		} else {
 			for (let n = left; n <= right; ++n) {
 				if (xfer_inside && n == right) {
-					console.log("split - f" + n + " b" + n + " " + C);
+					kCode += ("split - f" + n + " b" + n + " " + C + "\n");
 				} else {
-					console.log("knit + f" + n + " " + C);
+					kCode += ("knit + f" + n + " " + C + "\n");
 				}
 			}
 		}
@@ -182,11 +185,11 @@ function leftTriangle(max) {
 		if (row + 1 === height) left += 1;
 		if (row % 2 === 0) {
 			for (let n = right; n >= left; --n) {
-				console.log("knit - f" + n + " " + C);
+				kCode += ("knit - f" + n + " " + C + "\n");
 			}
 		} else {
 			for (let n = left; n <= right; ++n) {
-				console.log("knit + f" + n + " " + C);
+				kCode += ("knit + f" + n + " " + C + "\n");
 			}
 		}
 	}
@@ -197,10 +200,10 @@ for (let cr = 0; cr < repeats; ++cr) {
 	for (let rep = 0; rep < reps; ++rep) {
 		rightSquare(min + (2*rep+1)*width);
 	}
-	console.log("knit + f" + max + " " + Carrier);
+	kCode += ("knit + f" + max + " " + Carrier + "\n");
 	if (Carrier2) {
 		for (let n = max; n >= min; --n) {
-			console.log("knit - f" + n + " " + Carrier);
+			kCode += ("knit - f" + n + " " + Carrier + "\n");
 		}
 	}
 
@@ -209,32 +212,41 @@ for (let cr = 0; cr < repeats; ++cr) {
 		leftSquare(min + (2*rep+2)*width);
 	}
 	if (Carrier2) {
-		console.log("knit - f" + min + " " + Carrier2);
+		kCode += ("knit - f" + min + " " + Carrier2 + "\n");
 
 		for (let n = min; n <= max; ++n) {
-			console.log("knit + f" + n + " " + Carrier2);
+			kCode += ("knit + f" + n + " " + Carrier2 + "\n");
 		}
 	} else {
-		console.log("knit - f" + min + " " + Carrier);
+		kCode += ("knit - f" + min + " " + Carrier + "\n");
 	}
 }
 
 if (Carrier2) {
-	console.log("outhook " + Carrier2);
+	kCode += ("outhook " + Carrier2 + "\n");
 }
 
 
 for (let row = 0; row < padding; row += 2) {
 	for (let n = min; n <= max; ++n) {
-		console.log("knit + f" + n + " " + Carrier);
+		kCode += ("knit + f" + n + " " + Carrier + "\n");
 	}
 	for (let n = max; n >= min; --n) {
-		console.log("knit - f" + n + " " + Carrier);
+		kCode += ("knit - f" + n + " " + Carrier + "\n");
 	}
 }
 for (let n = min; n <= max; ++n) {
-	console.log("knit + f" + n + " " + Carrier);
+	kCode += ("knit + f" + n + " " + Carrier + "\n");
 }
 
 
-console.log("outhook " + Carrier);
+kCode += ("outhook " + Carrier + "\n");
+
+//write to file
+fs.writeFile("./../knitout-backend-swg/examples/in/entrelac.knitout", kCode, function(err) {
+    if(err) {
+        return console.log(err);
+    }
+
+    console.log("The file was saved!");
+}); 

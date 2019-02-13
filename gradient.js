@@ -1,3 +1,6 @@
+const fs = require('fs');
+let kCode = "";
+
 //Parameters:
 let stripesNum = 4; //number of knit stripes
 let columnPos = calculateIndexPosition(stripesNum);//create an array representing if stitches at each index is a knit or perl
@@ -19,35 +22,35 @@ x-xx--xxx---
 x-xx--xxx---
 */
 
-console.log(";!knitout-2");
-console.log(";;Carriers: 1 2 3 4 5 6 7 8 9 10");
+kCode += (";!knitout-2" + "\n");
+kCode += (";;Carriers: 1 2 3 4 5 6 7 8 9 10" + "\n");
 
 
-console.log("inhook " + carrier);
+kCode += ("inhook " + carrier + "\n");
 //Alternating tucks cast-on:
 for (let n = max; n >= min; --n) {
 	if ((max-n) % 2 == 0) {
 		if (columnPos[n - 1] === 0) {
-			console.log("tuck - f" + n + " " + carrier);
+			kCode += ("tuck - f" + n + " " + carrier + "\n");
 		} else{
-			console.log("tuck - b" + n + " " + carrier);
+			kCode += ("tuck - b" + n + " " + carrier + "\n");
 		}
 	}
 }
 for (let n = min; n <= max; ++n) {
 	if ((max-n)%2 == 1) {
 		if (columnPos[n - 1] === 0) {
-			console.log("tuck + f" + n + " " + carrier);
+			kCode += ("tuck + f" + n + " " + carrier + "\n");
 		} else{
-			console.log("tuck + b" + n + " " + carrier);
+			kCode += ("tuck + b" + n + " " + carrier + "\n");
 		}
 	}
 }
 
-console.log("miss + f" + max + " " + carrier);
+kCode += ("miss + f" + max + " " + carrier + "\n");
 
 //release the yarn from the carrier hook
-console.log("releasehook " + carrier);
+kCode += ("releasehook " + carrier + "\n");
 
 var current_height = 0;
 
@@ -58,11 +61,11 @@ while (current_height < height) {
 		//our column indexes start from 0 so we need to subtract 1
 		if (columnPos[s - 1] === 0) {
 			//knit back side
-			console.log("knit - f" + s + " " + carrier);
+			kCode += ("knit - f" + s + " " + carrier + "\n");
 		}
 		else {
 			//knit front side
-			console.log("knit - b" + s + " " + carrier);
+			kCode += ("knit - b" + s + " " + carrier + "\n");
 		}
 	}
 	current_height++;
@@ -70,10 +73,10 @@ while (current_height < height) {
 	//left to right
 	for (let s=1; s<=max; s++) {
 		if (columnPos[s - 1] === 0) {
-			console.log("knit + f" + s + " " + carrier);
+			kCode += ("knit + f" + s + " " + carrier + "\n");
 		}
 		else {
-			console.log("knit + b" + s + " " + carrier);
+			kCode += ("knit + b" + s + " " + carrier + "\n");
 		}
 	}
 	current_height++;
@@ -82,11 +85,11 @@ while (current_height < height) {
 //transfer any stitches on the back bed onto the front bed
 for (let s=1; s<=max; s++) {
 	if (columnPos[s - 1] === 1) {
-		console.log("xfer b" + s + " f" + s);
+		kCode += ("xfer b" + s + " f" + s + "\n");
 	}
 }
 
-console.log("outhook " + carrier);
+kCode += ("outhook " + carrier + "\n");
 
 
 //are we at the front or back of the fabric? 0 can equal front, 1 can equal back
@@ -100,3 +103,12 @@ function calculateIndexPosition(numStripes){
 	}
 	return array;
 }
+
+//write to file
+fs.writeFile("./../knitout-backend-swg/examples/in/gradient.knitout", kCode, function(err) {
+    if(err) {
+        return console.log(err);
+    }
+
+    console.log("The file was saved!");
+}); 

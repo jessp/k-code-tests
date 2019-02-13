@@ -1,3 +1,6 @@
+const fs = require('fs');
+let kCode = "";
+
 //Parameters:
 
 const width = 40;//multiple of 8
@@ -23,8 +26,8 @@ xxxxxxx----
 
 */
 
-console.log(";!knitout-2");
-console.log(";;Carriers: 1 2 3 4 5 6 7 8 9 10");
+kCode += (";!knitout-2" + "\n");
+kCode += (";;Carriers: 1 2 3 4 5 6 7 8 9 10" + "\n");
 
 
 let min = 1;
@@ -36,30 +39,30 @@ let side_of_fabric = ["f", "f", "f", "f", "b", "b", "b", "b"];
 
 //Alternating tucks cast-on:
 
-console.log("inhook " + carrier);
+kCode += ("inhook " + carrier + "\n");
 
 for (let n = max; n >= min; --n) {
 	if ((max - n) % 2 == 0) {
 		if (side_of_fabric[(n-1)%8] === "f"){
-			console.log("tuck - b" + n + " " + carrier);
+			kCode += ("tuck - b" + n + " " + carrier + "\n");
 		} else {
-			console.log("tuck - f" + n + " " + carrier);
+			kCode += ("tuck - f" + n + " " + carrier + "\n");
 		}
 	}
 }
 for (let n = min; n <= max; ++n) {
 	if ((max - n)%2 == 1) {
 		if (side_of_fabric[(n-1)%8] === "f"){
-			console.log("tuck + b" + n + " " + carrier);
+			kCode += ("tuck + b" + n + " " + carrier + "\n");
 		} else {
-			console.log("tuck + f" + n + " " + carrier);
+			kCode += ("tuck + f" + n + " " + carrier + "\n");
 		}
 	}
 }
 
-console.log("miss + f" + max + " " + carrier);
+kCode += ("miss + f" + max + " " + carrier + "\n");
 
-console.log("releasehook " + carrier);
+kCode += ("releasehook " + carrier + "\n");
 
 //Create a function that moves a variable from one index of an array to another
 Array.prototype.move = function(from, to) {
@@ -76,9 +79,9 @@ for (let r = 0; r < height; ++r) {
 		for (let n = max; n >= min; --n) {
 			if (side_of_fabric[counter % 8] !== previous_side_of_fabric[counter % 8]){
 				if (side_of_fabric[counter % 8] == "f"){
-					console.log("xfer b" + n + " f" + n);
+					kCode += ("xfer b" + n + " f" + n + "\n");
 				} else {
-					console.log("xfer f" + n + " b" + n);
+					kCode += ("xfer f" + n + " b" + n + "\n");
 				}
 			} 
 			counter++;
@@ -95,13 +98,13 @@ for (let r = 0; r < height; ++r) {
 		let counter = 0;
 		for (let n = max; n >= min; --n) {
 			//use the side_of_fabric array to determine the side of the fabric we're on
-			console.log("knit - " + side_of_fabric[counter%8] + n + " " + carrier);
+			kCode += ("knit - " + side_of_fabric[counter%8] + n + " " + carrier + "\n");
 			counter++;
 		}
 	} else {
 		let counter = 0;
 		for (let n = min; n <= max; ++n) {
-			console.log("knit + " + side_of_fabric[7 - counter%8] + n + " " + carrier);
+			kCode += ("knit + " + side_of_fabric[7 - counter%8] + n + " " + carrier + "\n");
 			counter++;
 		}
 	}
@@ -111,7 +114,7 @@ for (let r = 0; r < height; ++r) {
 		let counter = 0;
 		for (let n = max; n >= min; --n) {
 			if (side_of_fabric[counter % 8] == "b"){
-				console.log("xfer b" + n + " f" + n);
+				kCode += ("xfer b" + n + " f" + n + "\n");
 			} 
 			counter++;
 		}
@@ -130,4 +133,14 @@ for (let r = 0; r < height; ++r) {
 
 
 
-console.log("outhook " + carrier);
+kCode += ("outhook " + carrier + "\n");
+
+
+//write to file
+fs.writeFile("./../knitout-backend-swg/examples/in/links_links_4.knitout", kCode, function(err) {
+    if(err) {
+        return console.log(err);
+    }
+
+    console.log("The file was saved!");
+}); 

@@ -1,3 +1,5 @@
+const fs = require('fs');
+let kCode = "";
 /*
 Not my code. From Textiles Lab at: https://github.com/textiles-lab/knitout-examples
 Modified only to change width.
@@ -16,13 +18,13 @@ const Carrier = "3";
 
 
 
-console.log(";!knitout-2");
-console.log(";;Carriers: 1 2 3 4 5 6 7 8 9 10");
+kCode += (";!knitout-2" + "\n");
+kCode += (";;Carriers: 1 2 3 4 5 6 7 8 9 10" + "\n");
 
 
-console.log("inhook " + Carrier);
+kCode += ("inhook " + Carrier + "\n");
 
-console.log("x-stitch-number 61"); //in our table: "Half / Wrap" for Polo
+kCode += ("x-stitch-number 61"); //in our table: "Half / Wrap" for Po + "\n"lo
 
 let min = 1;
 let max = min + Width - 1;
@@ -30,19 +32,19 @@ let max = min + Width - 1;
 //alternating tucks cast-on
 for (let n = max; n >= min; --n) {
 	if ((max-n) % 2 == 0) {
-		console.log("tuck - f" + n + " " + Carrier);
+		kCode += ("tuck - f" + n + " " + Carrier + "\n");
 	}
 }
 for (let n = min; n <= max; ++n) {
 	if ((max-n)%2 == 1) {
-		console.log("tuck + f" + n + " " + Carrier);
+		kCode += ("tuck + f" + n + " " + Carrier + "\n");
 	}
 }
 
-console.log("miss + f" + max + " " + Carrier);
+kCode += ("miss + f" + max + " " + Carrier + "\n");
 
 //release the hook from the carrier hook
-console.log("releasehook " + Carrier);
+kCode += ("releasehook " + Carrier + "\n");
 
 // Rows of plain knitting:
 for (let r = 0; r < Height; ++r) {
@@ -50,14 +52,23 @@ for (let r = 0; r < Height; ++r) {
 	if (r % 2 == 0) {
 		//we end on the right side (i.e., going in + direction), so we start by going towards the left (-))
 		for (let n = max; n >= min; --n) {
-			console.log("knit - f" + n + " " + Carrier);
+			kCode += ("knit - f" + n + " " + Carrier + "\n");
 		}
 	} else {
 		for (let n = min; n <= max; ++n) {
-			console.log("knit + f" + n + " " + Carrier);
+			kCode += ("knit + f" + n + " " + Carrier + "\n");
 		}
 	}
 }
 
 //bring yarn carrier out of action
-console.log("outhook " + Carrier);
+kCode += ("outhook " + Carrier + "\n");
+
+//write to file
+fs.writeFile("./../knitout-backend-swg/examples/in/small_rectangle.knitout", kCode, function(err) {
+    if(err) {
+        return console.log(err);
+    }
+
+    console.log("The file was saved!");
+}); 

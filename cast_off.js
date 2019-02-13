@@ -1,3 +1,6 @@
+const fs = require('fs');
+let kCode = "";
+
 //Parameters:
 
 const shortWidth = 10;
@@ -23,10 +26,10 @@ xxxxx
 */
 
 
-console.log(";!knitout-2");
-console.log(";;Carriers: 1 2 3 4 5 6 7 8 9 10");
+kCode += (";!knitout-2" + "\n");
+kCode += (";;Carriers: 1 2 3 4 5 6 7 8 9 10" + "\n");
 
-console.log("inhook " + carrier);
+kCode += ("inhook " + carrier + "\n");
 
 let min = 1;
 let max = wideWidth - 1;
@@ -34,29 +37,29 @@ let max = wideWidth - 1;
 //Alternating tucks cast-on:
 for (let n = max; n >= min; --n) {
 	if ((max-n) % 2 == 0) {
-		console.log("tuck - f" + n + " " + carrier);
+		kCode += ("tuck - f" + n + " " + carrier + "\n");
 	}
 }
 for (let n = min; n <= max; ++n) {
 	if ((max-n)%2 == 1) {
-		console.log("tuck + f" + n + " " + carrier);
+		kCode += ("tuck + f" + n + " " + carrier + "\n");
 	}
 }
 
-console.log("miss + f" + max + " " + carrier);
+kCode += ("miss + f" + max + " " + carrier + "\n");
 
-console.log("releasehook " + carrier);
+kCode += ("releasehook " + carrier + "\n");
 
 for (let r = 0; r < height; ++r) {
 	//if we're not at the threshold between where we switch from short rows to long rows, knit normally
 	if (r < wideRows || r > wideRows){
 		if (r % 2 == 0) {
 			for (let n = max; n >= min; --n) {
-				console.log("knit - f" + n + " " + carrier);
+				kCode += ("knit - f" + n + " " + carrier + "\n");
 			}
 		} else {
 			for (let n = min; n <= max; ++n) {
-				console.log("knit + f" + n + " " + carrier);
+				kCode += ("knit + f" + n + " " + carrier + "\n");
 			}
 		}
 	//if we're at the threshold between where we switch from wide rows to short rows...
@@ -65,15 +68,15 @@ for (let r = 0; r < height; ++r) {
 		for (let row_index = min; row_index <= (wideWidth - shortWidth - 1); row_index++ ){
 			let direc = row_index % 2 === 1 ? "-" : "+";
 			//knit one course
-			console.log("knit " + direc + " f" + row_index + " " + carrier);
+			kCode += ("knit " + direc + " f" + row_index + " " + carrier + "\n");
 			//transfer the stitch to the back bed
-			console.log("xfer f" + row_index + " b" + row_index);
+			kCode += ("xfer f" + row_index + " b" + row_index + "\n");
 			//move the back carrier to the right
-			console.log("rack 1");
+			kCode += ("rack 1" + "\n");
 			//transfer the stitch back to the front bed, now one space to the right
-			console.log("xfer b" + row_index + " f" + (row_index + 1));
+			kCode += ("xfer b" + row_index + " f" + (row_index + 1) + "\n");
 			//return the back bed to the neutral position
-			console.log("rack 0");
+			kCode += ("rack 0" + "\n");
 		}
 		//after those operations, switch acting width to shortwidth
 		min = wideWidth - shortWidth;
@@ -81,4 +84,14 @@ for (let r = 0; r < height; ++r) {
 }
 
 //bring yarn carrier out of action
-console.log("outhook " + carrier);
+kCode += ("outhook " + carrier + "\n");
+
+
+//write to file
+fs.writeFile("./../knitout-backend-swg/examples/in/cast_off.knitout", kCode, function(err) {
+    if(err) {
+        return console.log(err);
+    }
+
+    console.log("The file was saved!");
+}); 

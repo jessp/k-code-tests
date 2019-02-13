@@ -1,3 +1,6 @@
+const fs = require('fs');
+let kCode = "";
+
 //Parameters:
 
 const startingWidth = 30;
@@ -23,10 +26,10 @@ xxxxx
 */
 
 
-console.log(";!knitout-2");
-console.log(";;Carriers: 1 2 3 4 5 6 7 8 9 10");
+kCode += (";!knitout-2" + "\n");
+kCode += (";;Carriers: 1 2 3 4 5 6 7 8 9 10" + "\n");
 
-console.log("inhook " + carrier);
+kCode += ("inhook " + carrier + "\n");
 
 let min = 1;
 let max = min + startingWidth - 1;
@@ -35,29 +38,29 @@ let actingWidth = max;
 //Alternating tucks cast-on:
 for (let n = max; n >= min; --n) {
 	if ((max-n) % 2 == 0) {
-		console.log("tuck - f" + n + " " + carrier);
+		kCode += ("tuck - f" + n + " " + carrier + "\n");
 	}
 }
 for (let n = min; n <= max; ++n) {
 	if ((max-n)%2 == 1) {
-		console.log("tuck + f" + n + " " + carrier);
+		kCode += ("tuck + f" + n + " " + carrier + "\n");
 	}
 }
 
-console.log("miss + f" + max + " " + carrier);
+kCode += ("miss + f" + max + " " + carrier + "\n");
 
 //release the yarn from the carrier hook
-console.log("releasehook " + carrier);
+kCode += ("releasehook " + carrier + "\n");
 
 for (let r = 0; r < height; ++r) {
 	//knit normally, alternating between back and front
 	if (r % 2 == 0) {
 		for (let n = actingWidth; n >= min; --n) {
-			console.log("knit - f" + n + " " + carrier);
+			kCode += ("knit - f" + n + " " + carrier + "\n");
 		}
 	} else {
 		for (let n = min; n <= actingWidth; ++n) {
-			console.log("knit + f" + n + " " + carrier);
+			kCode += ("knit + f" + n + " " + carrier + "\n");
 		}
 	}
 	//if we should decrease the width
@@ -65,16 +68,26 @@ for (let r = 0; r < height; ++r) {
 		//and we're going towards the right, we're going to attempt to secure some stitches
 		if (r % 2 == 1){
 			//first, transfer them to the back bed
-			console.log("xfer f" + actingWidth + " b" + actingWidth);
+			kCode += ("xfer f" + actingWidth + " b" + actingWidth + "\n");
 			//then move the back bed left one space
-			console.log("rack -1");
+			kCode += ("rack -1" + "\n");
 			//then transfer the stitch back to the front
-			console.log("xfer b" + actingWidth + " f" + (actingWidth - 1));
+			kCode += ("xfer b" + actingWidth + " f" + (actingWidth - 1) + "\n");
 			//and return the back bed to its starting position
-			console.log("rack 0");
+			kCode += ("rack 0" + "\n");
 		}
 		actingWidth--;
 	}
 }
 
-console.log("outhook " + carrier);
+kCode += ("outhook " + carrier + "\n");
+
+
+//write to file
+fs.writeFile("./../knitout-backend-swg/examples/in/decrease_right.knitout", kCode, function(err) {
+    if(err) {
+        return console.log(err);
+    }
+
+    console.log("The file was saved!");
+}); 

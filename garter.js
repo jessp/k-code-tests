@@ -1,11 +1,14 @@
+const fs = require('fs');
+let kCode = "";
+
 /*
 Not my code. From Textiles Lab at: https://github.com/textiles-lab/knitout-examples
 Modified only to change carriers and to remove knitout-frontend
 */
 
 
-console.log(";!knitout-2")
-console.log(";;Carriers: 1 2 3 4 5 6 7 8 9 10")
+kCode += (";!knitout-2" + "\n");
+kCode += (";;Carriers: 1 2 3 4 5 6 7 8 9 10" + "\n");
 
 // swatch variables
 var height = 40;
@@ -13,7 +16,7 @@ var width = 41; //want to put first stich on the front bed, hack for now
 var carrier = "3";
 
 // bring in carrier using yarn inserting hook
-console.log("inhook " + carrier);
+kCode += ("inhook " + carrier + "\n");
 
 var front = width%2;
 
@@ -21,7 +24,7 @@ var front = width%2;
 // tuck on alternate needles to cast on
 for (var s=width; s>0; s--) {
 	if (s%2 == front) {
-		console.log("tuck - f" + s + " " + carrier);
+		kCode += ("tuck - f" + s + " " + carrier + "\n");
 	}
 	else {
 		//k.miss("-", "f"+s, carrier);
@@ -29,7 +32,7 @@ for (var s=width; s>0; s--) {
 }
 for (var s=1; s<=width; s++) {
 	if (s%2 != front) {
-		console.log("tuck + f" + s + " " + carrier);
+		kCode += ("tuck + f" + s + " " + carrier + "\n");
 	}
 	else {
 		//k.miss("+", "f"+s, carrier);
@@ -37,26 +40,33 @@ for (var s=1; s<=width; s++) {
 }
 
 // release the yarn inserting hook
-console.log("releasehook " + carrier);
+kCode += ("releasehook " + carrier + "\n");
 
 
 // knit some rows back and forth
 for (var h=0; h<height; h++) {
 	for (var s=width; s>0; s--) {
-        console.log("knit - f" + s + " " + carrier);
+        kCode += ("knit - f" + s + " " + carrier + "\n");
 	}
     for (var s=width; s>0; s--) {
-        console.log("xfer f" + s + " b" + s);
+        kCode += ("xfer f" + s + " b" + s + "\n");
 	}
 	for (var s=1; s<=width; s++) {
-		console.log("knit + b" + s + " " + carrier);
+		kCode += ("knit + b" + s + " " + carrier + "\n");
 	}
     for (var s=1; s<=width; s++) {
-		console.log("xfer b" + s + " f" + s);
+		kCode += ("xfer b" + s + " f" + s + "\n");
 	}
 }
 
 // bring the yarn out with the yarn inserting hook
-console.log("outhook " + carrier);
+kCode += ("outhook " + carrier + "\n");
 
+//write to file
+fs.writeFile("./../knitout-backend-swg/examples/in/garter.knitout", kCode, function(err) {
+    if(err) {
+        return console.log(err);
+    }
 
+    console.log("The file was saved!");
+}); 

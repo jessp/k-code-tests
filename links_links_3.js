@@ -1,3 +1,6 @@
+const fs = require('fs');
+let kCode = "";
+
 //Parameters:
 
 const width = 36;//multiple of 6
@@ -23,13 +26,13 @@ x------x
 
 
 
-console.log(";!knitout-2");
-console.log(";;Carriers: 1 2 3 4 5 6 7 8 9 10");
+kCode += (";!knitout-2" + "\n");
+kCode += (";;Carriers: 1 2 3 4 5 6 7 8 9 10" + "\n");
 
 
 //Alternating tucks cast-on:
 
-console.log("inhook " + carrier);
+kCode += ("inhook " + carrier + "\n");
 
 let min = 1;
 let max = min + width - 1;
@@ -38,25 +41,25 @@ let max = min + width - 1;
 for (let n = max; n >= min; --n) {
 	if ((max-n) % 2 == 0) {
 		if ((max-n) % 6 === 0 || (max-n) % 6 === 5){
-			console.log("tuck - f" + n + " " + carrier);
+			kCode += ("tuck - f" + n + " " + carrier + "\n");
 		} else {
-			console.log("tuck - b" + n + " " + carrier);
+			kCode += ("tuck - b" + n + " " + carrier + "\n");
 		}
 	}
 }
 for (let n = min; n <= max; ++n) {
 	if ((max-n)%2 == 1) {
 		if ((max-n) % 6 === 0 || (max-n) % 6 === 5){
-			console.log("tuck + f" + n + " " + carrier);
+			kCode += ("tuck + f" + n + " " + carrier + "\n");
 		} else {
-			console.log("tuck + b" + n + " " + carrier);
+			kCode += ("tuck + b" + n + " " + carrier + "\n");
 		}
 	}
 }
 
-console.log("miss + f" + max + " " + carrier);
+kCode += ("miss + f" + max + " " + carrier + "\n");
 
-console.log("releasehook " + carrier);
+kCode += ("releasehook " + carrier + "\n");
 
 
 let top_or_bottom_of_square = false; //on the top or bottom of each unit, the stitches are different
@@ -72,15 +75,15 @@ for (let r = 0; r < height; ++r) {
 			if (top_or_bottom_of_square) {
 				//the first and sixth knit in each unit is treated differently
 				if (counter % 6 === 0 || counter % 6 === 5){
-					console.log("knit - f" + n + " " + carrier);
+					kCode += ("knit - f" + n + " " + carrier + "\n");
 				} else {
-					console.log("knit - b" + n + " " + carrier);
+					kCode += ("knit - b" + n + " " + carrier + "\n");
 				}
 			} else {
 				if (counter % 6 === 0 || counter % 6 === 5){
-					console.log("knit - b" + n + " " + carrier);
+					kCode += ("knit - b" + n + " " + carrier + "\n");
 				} else {
-					console.log("knit - f" + n + " " + carrier);
+					kCode += ("knit - f" + n + " " + carrier + "\n");
 				}
 			}
 			counter++;
@@ -91,15 +94,15 @@ for (let r = 0; r < height; ++r) {
 
 			if (top_or_bottom_of_square) {
 				if (counter % 6 === 0 || counter % 6 === 5){
-					console.log("knit + f" + n + " " + carrier);
+					kCode += ("knit + f" + n + " " + carrier + "\n");
 				} else {
-					console.log("knit + b" + n + " " + carrier);
+					kCode += ("knit + b" + n + " " + carrier + "\n");
 				}
 			} else {
 				if (counter % 6 === 0 || counter % 6 === 5){
-					console.log("knit + b" + n + " " + carrier);
+					kCode += ("knit + b" + n + " " + carrier + "\n");
 				} else {
-					console.log("knit + f" + n + " " + carrier);
+					kCode += ("knit + f" + n + " " + carrier + "\n");
 				}
 			}
 			counter++;
@@ -111,17 +114,17 @@ for (let r = 0; r < height; ++r) {
 		if (r % 6 === 0){
 			for (let n = min; n <= max; ++n) {
 				if ((n-1) % 6 === 0 || (n-1) % 6 === 5){
-					console.log("xfer f" + n + " b" + n);
+					kCode += ("xfer f" + n + " b" + n + "\n");
 				} else {
-					console.log("xfer b" + n + " f" + n);
+					kCode += ("xfer b" + n + " f" + n + "\n");
 				}
 			}
 		} else if (r % 6 === 4){
 			for (let n = min; n <= max; ++n) {
 				if ((n-1) % 6 === 0 || (n-1) % 6 === 5){
-					console.log("xfer b" + n + " f" + n);
+					kCode += ("xfer b" + n + " f" + n + "\n");
 				} else {
-					console.log("xfer f" + n + " b" + n);
+					kCode += ("xfer f" + n + " b" + n + "\n");
 				}
 			}
 		}
@@ -129,10 +132,19 @@ for (let r = 0; r < height; ++r) {
 		//on the last row, move any stitches on the back bed to the front
 		for (let n = min; n <= max; ++n) {
 			if ((n-1) % 6 !== 0 && (n-1) % 6 !== 5){
-				console.log("xfer b" + n + " f" + n);
+				kCode += ("xfer b" + n + " f" + n + "\n");
 			}
 		}
 	}
 }
 
-console.log("outhook " + carrier);
+kCode += ("outhook " + carrier + "\n");
+
+//write to file
+fs.writeFile("./../knitout-backend-swg/examples/in/links_links_3.knitout", kCode, function(err) {
+    if(err) {
+        return console.log(err);
+    }
+
+    console.log("The file was saved!");
+}); 

@@ -1,3 +1,6 @@
+const fs = require('fs');
+let kCode = "";
+
 //Parameters:
 
 const shortWidth = 10;//the narrower of the two widths
@@ -24,31 +27,31 @@ xx
 */
 
 
-console.log(";!knitout-2");
-console.log(";;Carriers: 1 2 3 4 5 6 7 8 9 10");
+kCode += (";!knitout-2" + "\n");
+kCode += (";;Carriers: 1 2 3 4 5 6 7 8 9 10" + "\n");
 
 
 //Alternating tucks cast-on:
 
-console.log("inhook " + carrier);
+kCode += ("inhook " + carrier + "\n");
 
 let min = 1;
 let max = shortWidth - 1;
 
 for (let n = max; n >= min; --n) {
 	if ((max-n) % 2 == 0) {
-		console.log("tuck - f" + n + " " + carrier);
+		kCode += ("tuck - f" + n + " " + carrier + "\n");
 	}
 }
 for (let n = min; n <= max; ++n) {
 	if ((max-n)%2 == 1) {
-		console.log("tuck + f" + n + " " + carrier);
+		kCode += ("tuck + f" + n + " " + carrier + "\n");
 	}
 }
 
-console.log("miss + f" + max + " " + carrier);
+kCode += ("miss + f" + max + " " + carrier + "\n");
 
-console.log("releasehook " + carrier);
+kCode += ("releasehook " + carrier + "\n");
 
 
 for (let r = 0; r < height; ++r) {
@@ -56,11 +59,11 @@ for (let r = 0; r < height; ++r) {
 	if (r < shortRows || r > shortRows){
 		if (r % 2 == 0) {
 			for (let n = max; n >= min; --n) {
-				console.log("knit - f" + n + " " + carrier);
+				kCode += ("knit - f" + n + " " + carrier + "\n");
 			}
 		} else {
 			for (let n = min; n <= max; ++n) {
-				console.log("knit + f" + n + " " + carrier);
+				kCode += ("knit + f" + n + " " + carrier + "\n");
 			}
 		}
 	//if we're at the threshold between where we switch from short rows to wide rows...
@@ -69,11 +72,11 @@ for (let r = 0; r < height; ++r) {
 		for (let n = min; n <= wideWidth - 1; ++n) {
 			//if we're within the range of short width...
 			if (n <= shortWidth){
-				console.log("knit + f" + n + " " + carrier);
+				kCode += ("knit + f" + n + " " + carrier + "\n");
 			} else {
 				//otherwise knit on every other needle
 				if (n % 2 === 0){
-					console.log("knit + f" + n + " " + carrier);
+					kCode += ("knit + f" + n + " " + carrier + "\n");
 				}
 			}
 			
@@ -84,4 +87,14 @@ for (let r = 0; r < height; ++r) {
 }
 
 //bring yarn carrier out of action
-console.log("outhook " + carrier);
+kCode += ("outhook " + carrier + "\n");
+
+
+//write to file
+fs.writeFile("./../knitout-backend-swg/examples/in/cast_on.knitout", kCode, function(err) {
+    if(err) {
+        return console.log(err);
+    }
+
+    console.log("The file was saved!");
+}); 

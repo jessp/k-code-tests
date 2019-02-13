@@ -1,3 +1,6 @@
+const fs = require('fs');
+let kCode = "";
+
 //Not my code, from the Textiles Lab repo https://github.com/textiles-lab/knitout-examples
 //only changed to remove knitout writer and to change the carrier
 
@@ -15,8 +18,8 @@ const carrier = "3";
 //Doesn't require a cast-on.
 
 
-console.log(";!knitout-2");
-console.log(";;Carriers: 1 2 3 4 5 6 7 8 9 10");
+kCode += (";!knitout-2" + "\n");
+kCode += (";;Carriers: 1 2 3 4 5 6 7 8 9 10" + "\n");
 
 let min = 1;
 let max = min + width - 1;
@@ -24,21 +27,21 @@ let max = min + width - 1;
 function knitTwoRows() {
 	for (let n = max; n >= min; --n) {
 		let bed = ((max - n) % 2 == 0 ? 'f' : 'b');
-		console.log("knit - " + bed + n + " " + carrier);
+		kCode += ("knit - " + bed + n + " " + carrier + "\n");
 	}
 	for (let n = min; n <= max; ++n) {
 		let bed = ((max - n) % 2 == 0 ? 'b' : 'f');
-		console.log("knit + " + bed + n + " " + carrier);
+		kCode += ("knit + " + bed + n + " " + carrier + "\n");
 	}
 }
 
 
-console.log("x-stitch-number 63"); //in our table: "Knitting" for Polo
+kCode += ("x-stitch-number 63"); //in our table: "Knitting" for Po + "\n"lo
 
 // Get carrier in:
-console.log("inhook " + carrier);
+kCode += ("inhook " + carrier + "\n");
 knitTwoRows();
-console.log("releasehook " + carrier);
+kCode += ("releasehook " + carrier + "\n");
 
 // Finish the remaining rows:
 for (let r = 2; r < height; r += 2) {
@@ -46,4 +49,13 @@ for (let r = 2; r < height; r += 2) {
 }
 
 // Take carrier out:
-console.log("outhook " + carrier);
+kCode += ("outhook " + carrier + "\n");
+
+//write to file
+fs.writeFile("./../knitout-backend-swg/examples/in/interlock.knitout", kCode, function(err) {
+    if(err) {
+        return console.log(err);
+    }
+
+    console.log("The file was saved!");
+}); 

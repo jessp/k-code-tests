@@ -1,3 +1,6 @@
+const fs = require('fs');
+let kCode = "";
+
 //Parameters:
 
 const width = 33;//odd number so we have a knit rather than a miss on both ends
@@ -21,12 +24,12 @@ xxxxxxxxxxx
 
 
 
-console.log(";!knitout-2");
-console.log(";;Carriers: 1 2 3 4 5 6 7 8 9 10");
+kCode += (";!knitout-2" + "\n");
+kCode += (";;Carriers: 1 2 3 4 5 6 7 8 9 10" + "\n");
 
 //Alternating tucks cast-on:
 
-console.log("inhook " + carrier);
+kCode += ("inhook " + carrier + "\n");
 
 let min = 1;
 let max = min + width - 1;
@@ -34,28 +37,28 @@ let max = min + width - 1;
 
 for (let n = max; n >= min; --n) {
 	if ((max-n) % 2 == 0) {
-		console.log("tuck - f" + n + " " + carrier);
+		kCode += ("tuck - f" + n + " " + carrier + "\n");
 	}
 }
 for (let n = min; n <= max; ++n) {
 	if ((max-n)%2 == 1) {
-		console.log("tuck + f" + n + " " + carrier);
+		kCode += ("tuck + f" + n + " " + carrier + "\n");
 	}
 }
 
-console.log("miss + f" + max + " " + carrier);
+kCode += ("miss + f" + max + " " + carrier + "\n");
 
-console.log("releasehook " + carrier);
+kCode += ("releasehook " + carrier + "\n");
 
 //knit normally for the bottom half of the swatch
 for (let r = 0; r < height/2; ++r) {
 	if (r % 2 == 0) {
 		for (let n = max; n >= min; --n) {
-			console.log("knit - f" + n + " " + carrier);
+			kCode += ("knit - f" + n + " " + carrier + "\n");
 		}
 	} else {
 		for (let n = min; n <= max; ++n) {
-			console.log("knit + f" + n + " " + carrier);
+			kCode += ("knit + f" + n + " " + carrier + "\n");
 		}
 	}
 }
@@ -69,30 +72,39 @@ for (let r = height/2; r < height; ++r) {
 		//carrier, and moving ("racking") the back carrier
 		for (let n = max; n >= min; --n) {
 			if (n % 2 === 0){
-				console.log("xfer f" + n + " b" + n);
-				console.log("rack 1");
-				console.log("xfer b" + n + " f" + (n+1));
-				console.log("rack 0");
+				kCode += ("xfer f" + n + " b" + n + "\n");
+				kCode += ("rack 1" + "\n");
+				kCode += ("xfer b" + n + " f" + (n+1) + "\n");
+				kCode += ("rack 0" + "\n");
 			}
 		}
 	}
 	if (r % 2 == 0) {
 		for (let n = max; n >= min; --n) {
 			if (n % 2 === 0){
-				console.log("miss - f" + n + " " + carrier);
+				kCode += ("miss - f" + n + " " + carrier + "\n");
 			} else {
-				console.log("knit - f" + n + " " + carrier);
+				kCode += ("knit - f" + n + " " + carrier + "\n");
 			}
 		}
 	} else {
 		for (let n = min; n <= max; ++n) {
 			if (n % 2 === 0){
-				console.log("miss + f" + n + " " + carrier);
+				kCode += ("miss + f" + n + " " + carrier + "\n");
 			} else {
-				console.log("knit + f" + n + " " + carrier);
+				kCode += ("knit + f" + n + " " + carrier + "\n");
 			}
 		}
 	}
 }
 
-console.log("outhook " + carrier);
+kCode += ("outhook " + carrier + "\n");
+
+//write to file
+fs.writeFile("./../knitout-backend-swg/examples/in/half_gauge.knitout", kCode, function(err) {
+    if(err) {
+        return console.log(err);
+    }
+
+    console.log("The file was saved!");
+}); 
