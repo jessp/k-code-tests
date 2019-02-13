@@ -50,14 +50,11 @@ for (let r = 0; r < height; ++r) {
 			if (n % 2 === 0){
 				kCode += ("knit - f" + n + " " + carrier + "\n");
 			} else {
-				kCode += ("tuck - b" + n + " " + carrier + "\n");
-			}
-		}
-		//after the last row of stitches, transfer any stitches on the back bed to the front
-		if (r === (height - 1)){
-			for (let xf = max; n >= min; --xf) {
-				if (xf % 2 === 0){
-					kCode += ("xfer b" + xf + " f" + xf + "\n");
+				//knit rather than tuck on far edges to prevent error
+				if (n == min){
+					kCode += ("knit - b" + n + " " + carrier + "\n");
+				} else {
+					kCode += ("tuck - b" + n + " " + carrier + "\n");
 				}
 			}
 		}
@@ -67,14 +64,11 @@ for (let r = 0; r < height; ++r) {
 			if (n % 2 === 1){
 				kCode += ("knit + b" + n + " " + carrier + "\n");
 			} else {
-				kCode += ("tuck + f" + n + " " + carrier + "\n");
-			}
-		}
-		//after the last row of stitches, transfer any stitches on the back bed to the front
-		if (r === (height - 1)){
-			for (let xf = min; xf <= max; ++xf) {
-				if (xf % 2 === 1){
-					kCode += ("xfer b" + xf + " f" + xf + "\n");
+				//knit rather than tuck on far edges to prevent error
+				if (n == max){
+					kCode += ("knit + f" + n + " " + carrier + "\n");
+				} else {
+					kCode += ("tuck + f" + n + " " + carrier + "\n");
 				}
 			}
 		}
