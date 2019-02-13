@@ -27,18 +27,12 @@ for (var s=width; s>0; s--) {
     if(s%2==front) {
     	kCode += ("tuck - f" + s + " " + carrier + "\n");
     }
-    else {
-    	kCode += ("tuck - b" + s + " " + carrier + "\n");
-    }
 }
 
 //rib on way back, skip last of the tucks
 for (var s=2; s<=width; s++) {
-    if (s%2==front) {
-    	kCode += ("knit + f" + s + " " + carrier + "\n");
-    }
-    else {
-        kCode += ("knit + b" + s + " " + carrier + "\n");
+    if (s%2!=front) {
+    	kCode += ("tuck + b" + s + " " + carrier + "\n");
     }
 }
 
