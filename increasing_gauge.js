@@ -95,11 +95,17 @@ while (width / gaugeWidth > 1){ //we'll stop when we can only do one guage thing
 			for (let n = max; n >= min; --n) {
 				if (n % gaugeWidth !== 0 & n !== min & n !== max){
 					kCode += ("xfer f" + n + " b" + n + "\n");
-					kCode += ("rack 1" + "\n");
-					kCode += ("xfer b" + n + " f" + (n+1) + "\n");
-					kCode += ("rack 0" + "\n");
-				}
+				} 
 			}
+			kCode += ("rack 1" + "\n");
+
+			for (let n = max; n >= min; --n) {
+				if (n % gaugeWidth !== 0 & n !== min & n !== max){
+					kCode += ("xfer b" + n + " f" + (n+1) + "\n");
+				} 
+			}
+
+			kCode += ("rack 0" + "\n");
 		}
 	}
 }
