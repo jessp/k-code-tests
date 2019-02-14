@@ -70,14 +70,25 @@ for (let r = height/2; r < height; ++r) {
 	if (r === height/2){
 		//remember, our transfering process involves moving transfering back and forth from the back to the front
 		//carrier, and moving ("racking") the back carrier
+
+		//transfer from front bed to back
 		for (let n = max; n >= min; --n) {
 			if (n % 2 === 0){
 				kCode += ("xfer f" + n + " b" + n + "\n");
-				kCode += ("rack 1" + "\n");
-				kCode += ("xfer b" + n + " f" + (n+1) + "\n");
-				kCode += ("rack 0" + "\n");
 			}
 		}
+
+		kCode += ("rack 1" + "\n"); //move back bed one over
+
+		//move from back bed to front in new position
+		for (let n = max; n >= min; --n) {
+			if (n % 2 === 0){
+				kCode += ("xfer b" + n + " f" + (n+1) + "\n");
+			}
+		}
+
+		kCode += ("rack 0" + "\n"); //return racking to initial position
+
 	}
 	if (r % 2 == 0) {
 		for (let n = max; n >= min; --n) {
