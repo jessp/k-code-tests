@@ -47,6 +47,17 @@ kCode += ("inhook " + carrier + "\n");
 let min = 1;
 let max = min + width - 1;
 
+for (let n = max; n >= min; --n) {
+	if ((max-n) % 2 == 0) {
+		kCode += ("tuck - f" + n + " " + carrier + "\n");
+	}
+}
+for (let n = min; n <= max; ++n) {
+	if ((max-n)%2 == 1) {
+		kCode += ("tuck + f" + n + " " + carrier + "\n");
+	}
+}
+
 kCode += ("miss + f" + max + " " + carrier + "\n");
 
 kCode += ("releasehook " + carrier + "\n");
