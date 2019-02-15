@@ -29,7 +29,7 @@ let rects = [
 
 ];
 
-generateRectangles(rects, 0, true);
+generateRectangles(rects, rects[0], true);
 
 
 //function to return a random entry from carrier or styles list
@@ -38,18 +38,17 @@ function getRandomFromList(theArray){
 }
 
 //recursive function to subdivide rectangle
-function generateRectangles(rectangleArray, rectangleIndex, horz){
+function generateRectangles(rectangleArray, prevRect, horz){
 	//if we're dividing horizontally, ie. reducing width
 	if (horz){
-		subdivide(rectangleArray, rectangleIndex, true);
+		subdivide(rectangleArray, prevRect, true);
 	} else {
-		subdivide(rectangleArray, rectangleIndex, false);
+		subdivide(rectangleArray, prevRect, false);
 	}
 }
 
 
-function subdivide(rectangleArray, rectangleIndex, horz){
-	let oldRectangle = rectangleArray[rectangleIndex];
+function subdivide(rectangleArray, prevRect, horz){
 	let newRectangle = {
 		x: 0,
 		y: 0,
@@ -63,28 +62,30 @@ function subdivide(rectangleArray, rectangleIndex, horz){
 	let dimensionB = horz ? "height" : "width";
 	let pointA = horz ? "x" : "y"; //starting point that changes in newRectangle
 	let pointB = horz ? "y" : "x";
-	let startingDimension = JSON.parse(JSON.stringify(oldRectangle[dimensionA]));
 
 	//subdivide between 20% and 80% of direction
-	let linePosition = Math.floor((Math.random() * oldRectangle[dimensionA] * 0.8) + (oldRectangle[dimensionA] * 0.2));
-	oldRectangle[dimensionA] = linePosition;
-	rectangleArray[rectangleIndex] = oldRectangle;
-	//if the rectangle is tall enough and our random function holds true, subdivide the rectangle further
-	if (oldRectangle[dimensionB] > 6 && Math.random() > 0.3){
+	let linePosition = Math.floor((Math.random() * prevRect[dimensionA] * 0.8) + (prevRect[dimensionA] * 0.2));
 
-		generateRectangles(rectangleArray, rectangleIndex, !horz);
+	newRectangle[pointA] = prevRect[pointA] + linePosition;
+	newRectangle[pointB] = prevRect[pointB];
+	newRectangle[dimensionB] = prevRect[dimensionB];
+	newRectangle[dimensionA] = prevRect[dimensionA] - linePosition;
+	if (newRectangle[dimensionA] + newRectangle[pointA] > 40 || newRectangle[dimensionB] + newRectangle[pointB] > 40){
+		console.log(linePosition, "A", prevRect, "B", newRectangle);
 	}
-
-	newRectangle[pointA] = oldRectangle[pointA] + linePosition;
-	newRectangle[pointB] = oldRectangle[pointB];
-	newRectangle[dimensionB] = oldRectangle[dimensionB];
-	newRectangle[dimensionA] = startingDimension - oldRectangle[dimensionA];
 	rectangleArray.push(newRectangle);
-	// console.log(rectangleIndex + 1, rectangleArray.length);
 
 	if (newRectangle[dimensionB] > 6 && Math.random() > 0.3){
-		generateRectangles(rectangleArray, rectangleArray.length - 1, !horz);
+		generateRectangles(rectangleArray, newRectangle, !horz);
 	}
+
+	prevRect[dimensionA] = linePosition;
+	//if the rectangle is tall enough and our random function holds true, subdivide the rectangle further
+	if (prevRect[dimensionB] > 6 && Math.random() > 0.3){
+
+		generateRectangles(rectangleArray, prevRect, !horz);
+	}
+
 
 }
 
@@ -98,11 +99,11 @@ function visualizeAndTest(width, height, rects){
 	}
 
 	for (var r = 0; r < rects.length; r ++){
-
 		let rect = rects[r];
 		for (var h = rect["y"]; h < (rect["y"] + rect["height"]); h++){
-			let newArray = new Array(rect["width"]).fill(r);
-			Array.prototype.splice.apply(startingArray[h], [rect["x"], (rect["x"] + rect["width"])].concat(newArray));
+			for (var w = rect["x"]; w < (rect["x"] + rect["width"]); w++){
+				startingArray[h][w] = rect["styles"][0];
+			}
 		}
 	}
 
