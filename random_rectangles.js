@@ -6,17 +6,15 @@ let kCode = "";
 
 const width = 40;
 const height = 40;
-// const carriers = ["3", "2", "1"];//all possible carriers
-const carriers = ["3"];//all possible carriers
+const carrier = "3";
 const styles = ["knit", "perl", "waffle", "seed", "rib", "irishmoss", "cardigan"];//all possible styles
-var usedCarriers = [];//which carriers we're actually using
 
 kCode += (";!knitout-2" + "\n");
 kCode += (";;Carriers: 1 2 3 4 5 6 7 8 9 10" + "\n");
 
 //Operation:
 
-//Makes a width x height rectangle of knitting.
+//Makes a width x height rectangle of knitting using carrier 3.
 //The rectangle is sub-divided into random patterns of random size.
 //Future work may be completed to also support random colours in this knit pattern.
 //It's meant so demonstrate how to switch between different textures programmatically.
@@ -29,16 +27,16 @@ let rects = [
 	y: 0,
 	width: width,
 	height: height,
-	carrier: getRandomFromList(carriers),
+	carrier: carrier,
 	styles: getRandomFromList(styles)
 }
 
 ];
 
-generateRectangles(rects, rects[0], true, usedCarriers);
+generateRectangles(rects, rects[0], true, carrier);
 let knittableRectangles = convertToGrid(width, height, rects);
 let patternedRectangles = knitToPatterns(knittableRectangles);
-let patternedRectanglesWithMeta = addXfersAndCastOn(patternedRectangles, usedCarriers, kCode);
+let patternedRectanglesWithMeta = addXfersAndCastOn(patternedRectangles, carrier, kCode);
 
 
 
@@ -48,30 +46,25 @@ function getRandomFromList(theArray){
 }
 
 //recursive function to subdivide rectangle
-function generateRectangles(rectangleArray, prevRect, horz, usedCars){
+function generateRectangles(rectangleArray, prevRect, horz, car){
 	//if we're dividing horizontally, ie. reducing width
 	if (horz){
-		subdivide(rectangleArray, prevRect, true, usedCars);
+		subdivide(rectangleArray, prevRect, true, car);
 	} else {
-		subdivide(rectangleArray, prevRect, false, usedCars);
+		subdivide(rectangleArray, prevRect, false, car);
 	}
 }
 
 
-function subdivide(rectangleArray, prevRect, horz, usedCars){
-	let carrier = getRandomFromList(carriers);
+function subdivide(rectangleArray, prevRect, horz, car){
 	let newRectangle = {
 		x: 0,
 		y: 0,
 		width: 0,
 		height: 0,
-		carrier: carrier,
+		carrier: car,
 		styles: getRandomFromList(styles)
 	};
-
-	if (!usedCars.includes(carrier)){
-		usedCars.push(carrier);
-	}
 
 	let dimensionA = horz ? "width" : "height"; //dimension we're changing with this slice
 	let dimensionB = horz ? "height" : "width";
@@ -92,14 +85,14 @@ function subdivide(rectangleArray, prevRect, horz, usedCars){
 	rectangleArray.push(newRectangle);
 
 	if (newRectangle[dimensionB] > 6 && Math.random() > 0.3){
-		generateRectangles(rectangleArray, newRectangle, !horz, usedCars);
+		generateRectangles(rectangleArray, newRectangle, !horz, car);
 	}
 
 	prevRect[dimensionA] = linePosition;
 	//if the rectangle is tall enough and our random function holds true, subdivide the rectangle further
 	if (prevRect[dimensionB] > 6 && Math.random() > 0.3){
 
-		generateRectangles(rectangleArray, prevRect, !horz, usedCars);
+		generateRectangles(rectangleArray, prevRect, !horz, car);
 	}
 
 
@@ -160,11 +153,10 @@ function knitToPatterns(rectangles){
 
 
 //a function that adds xfers to back or front based on our generated pattern
-function addXfersAndCastOn(data, usedCars, code){
+function addXfersAndCastOn(data, car, code){
 	//create new variable for width with added knit border on left and right
 	let totalWidth = data[0].length + 2;
-	code += doCastOn(usedCars[0], totalWidth);
-	code += knitAndReleaseOtherHooks(usedCars.slice(1), totalWidth);
+	code += doCastOn(car, totalWidth);
 	//transfer to the correct bed from the cast-on method
 	for (let indx = data[0].length - 1; indx >= 0; indx--){
 		if (data[0][indx][7] == "b"){
@@ -180,7 +172,7 @@ function addXfersAndCastOn(data, usedCars, code){
 			//knit normally on the first and last row
 			if (col === 0 || col === (totalWidth - 1)){
 				let knitNum = row % 2 === 0 ? (totalWidth - col) : (col + 1);
-				code += ("knit " + direction + " f" + knitNum + " " + usedCars[usedCars.length - 1] + "\n");
+				code += ("knit " + direction + " f" + knitNum + " " + car + "\n");
 			} else {
 				code += data[row][col - 1] + "\n";
 				if (row < data[0].length-1){
@@ -208,11 +200,8 @@ function addXfersAndCastOn(data, usedCars, code){
 		}
 	}
 
-	//take all carrier hooks out of action
-	for (let car = 0; car < usedCars.length; car++){
-		let carrier = usedCars[car];
-		code += ("outhook " + carrier + "\n");
-	}
+	//take carrier hook out of action
+	code += ("outhook " + car + "\n");
 
 	writeToFile(code)
 
@@ -229,28 +218,6 @@ function writeToFile(code){
 	}); 
 }
 
-
-//Knit and release other yarn carrier hooks so we can knit with them
-function knitAndReleaseOtherHooks(otherCarriers, width){
-	var code = "";
-	for (let theCar = 0; theCar < otherCarriers.length; theCar++){
-
-		let carrier = otherCarriers[theCar];
-		code += ("inhook " + carrier + "\n");
-		for (let column = width; column > 0; column--) {
-			code += ("knit - f" + column + " " + carrier + "\n");
-		}
-		for (let column = 1; column <= width; column++) {
-			code += ("knit + f" + column + " " + carrier + "\n");
-		}
-
-		code += ("releasehook " + carrier + "\n");
-
-	}
-
-	return code;
-
-}
 
 //Alternating tucks cast-on:
 function doCastOn(carrier, width){
@@ -281,6 +248,13 @@ function doCastOn(carrier, width){
 	code += ("miss + b" + width + " " + carrier + "\n");
 
 	code += ("releasehook " + carrier + "\n");
+
+	for (let column = width; column > 0; column--) {
+		code += ("knit - f" + column + " " + carrier + "\n");
+	}
+	for (let column = 1; column <= width; column++) {
+		code += ("knit + f" + column + " " + carrier + "\n");
+	}
 
 	return code;
 }
