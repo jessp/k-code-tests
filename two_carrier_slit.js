@@ -105,8 +105,8 @@ for (let r = 0; r < slitHeight; ++r) {
 		}
 	}
 
-	if (r == 1){
-		//release carrierB from the hook after 2 rows of knitting
+	if (r == 0){
+		//release carrierB from the hook after 1 row of knitting
 		kCode += ("releasehook " + carrierB + "\n");
 	}
 }
