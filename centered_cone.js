@@ -4,17 +4,19 @@ let kCode = "";
 //Parameters:
 
 const width = 40;
+const numDecreases = 24; //number of rows before we stop decreasing width
 const height = 40;
 const carrier = "3";
 const numTransfer = 4;//number of stitches to transfer at a time
 
 //Operation:
-//Makes a cone that slowly decreases in radius towards the top, evenly decreasing in size on both sides.
+//Makes a tube that slowly decreases in radius towards the top, evenly decreasing in size on both sides.
 //We accomplish this by knitting on every other needle on both sides, so we have a spare needle on the
 //opposite bed to knit on.
 
 /*
-
+	   x
+	   x
 	   x
 	  xxx
 	 xxxxx
@@ -62,47 +64,42 @@ kCode += ("miss + f" + max + " " + carrier + "\n");
 
 kCode += ("releasehook " + carrier + "\n");
 
+
 //simple function to move a range of needles in a direction by transfering them to the opposing bed
-function rack(needles, startingBed, direction){
+function rack(needles, bed, direction){
+	let secondBed = bed === "f" ? "b" : "f";
+
 	let code = "";
-	let endBed = startingBed === "f" ? "b" : "f";
-	let directionOfMovement;
-	//determing which direction we should move the rack in based on starting bad and direction
-	if (startingBed == "f"){
-		if (direction == "+"){
-			directionOfMovement = 1;
-		} else {
-			directionOfMovement = -1;
-		}
+
+	if (bed === "f"){
+		code += ("rack " + (direction === "+" ? "-1" : "1") + "\n");
 	} else {
-		if (direction == "+"){
-			directionOfMovement = -1;
-		} else {
-			directionOfMovement = 1;
-		}
+		code += ("rack " + (direction === "+" ? "1" : "-1") + "\n");
 	}
 
-	code += ("rack " + (directionOfMovement === 1 ? -1 : 1) + "\n");
-
 	for (var n = 0; n < needles.length; n++){
-		code += ("xfer " + startingBed + needles[n] + " " +  endBed + (needles[n] + (directionOfMovement)) + "\n");
+		code += ("xfer " + bed + needles[n] + " "  + secondBed + (needles[n] + (direction == "+" ? 1 : -1)) + "\n");
 	}
 
-	code += ("rack " + (directionOfMovement) + "\n");
+	if (bed === "f"){
+		code += ("rack " + (direction === "+" ? "1" : "-1") + "\n");
+	} else {
+		code += ("rack " + (direction === "+" ? "-1" : "1") + "\n");
+	}
 
 	for (var n = 0; n < needles.length; n++){
-		code += ("xfer " + endBed + (needles[n] + (directionOfMovement)) + " " +  startingBed + (needles[n] + (directionOfMovement * 2)) + "\n");
+		code += ("xfer "  + secondBed + (needles[n] + (direction == "+" ? 1 : -1)) + " " + bed + (needles[n] + (direction == "+" ? 2 : -2)) + "\n");
 	}
 
 	code += ("rack 0" + "\n");
 
 	return code;
-
 }
+
 
 for (let r = 0; r < height; ++r) {
 	//every 4 rows (technically two since we're alternating between back bed and front bed)...
-	if (r % 4 == 0 && r > 0 && max >= 3){
+	if (r % 4 == 0 && r > 0 && max >= 3 && r < numDecreases){
 
 		//transfer needles to a new position on the front bed
 		let lastFourFrontNeedles = [...Array(4)].map((_, i) => max - i * 2);
@@ -113,8 +110,8 @@ for (let r = 0; r < height; ++r) {
 		//transfer needles to a new position on the back bed
 		let lastFourBackNeedles = [...Array(4)].map((_, i) => max - i * 2);
 		kCode += rack(lastFourBackNeedles, "b", "-");
-		// let firstFourBackNeedles = [...Array(4)].map((_, i) => min + i * 2 + 1);
-		// kCode += rack(firstFourBackNeedles, "b", "+");
+		let firstFourBackNeedles = [...Array(4)].map((_, i) => min + i * 2 + 1);
+		kCode += rack(firstFourBackNeedles, "b", "+");
 
 		//decrease the width
 		max = max - 2;
