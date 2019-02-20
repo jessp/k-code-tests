@@ -174,7 +174,6 @@ function addXfersAndCastOn(data, car, code){
 				let knitNum = row % 2 === 0 ? (totalWidth - col) : (col + 1);
 				code += ("knit " + direction + " f" + knitNum + " " + car + "\n");
 			} else {
-				code += data[row][col - 1] + "\n";
 				if (row < data[0].length-1){
 					//remember that we're knitting back and forth, so we have to take that into account when comparing the next row of stitches
 					let index = row % 2 === 0 ? (totalWidth - col - 2) : (col - 1);
@@ -186,8 +185,15 @@ function addXfersAndCastOn(data, car, code){
 					if (sideOfFabric != nextSideOfFabric){
 						let stitchIndex = data[row][index].split(" ")[2].slice(1);
 						transferIndexes[col] = [nextSideOfFabric, stitchIndex];
+
+						//we can't transfer a tucked loop from one side of the fabric to the other
+						//so, instead we'll convert it to a knit, while keeping the other params the same.
+						if (data[row][index].slice(0, 4) === "tuck") {
+							data[row][index] = "knit" + data[row][index].slice(4);
+						}
 					}
 				}
+				code += data[row][col - 1] + "\n";
 			}	
 		}
 
@@ -209,7 +215,7 @@ function addXfersAndCastOn(data, car, code){
 
 function writeToFile(code){
 	//write to file
-	fs.writeFile("./../knitout-backend-swg/examples/in/random_rectangles.knitout", code, function(err) {
+	fs.writeFile("./../knitout-backend-swg/examples/in/random_rectangles2.knitout", code, function(err) {
 	    if(err) {
 	        return console.log(err);
 	    }
