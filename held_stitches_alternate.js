@@ -1,21 +1,34 @@
 const fs = require('fs');
 let kCode = "";
-/*
-Not my code. From Textiles Lab at: https://github.com/textiles-lab/knitout-examples
-Modified only to change width.
-*/
 
 //Parameters:
 
 const width = 16;
-const height = 40;
+const height = 40;//even to simplify code
+const shortRowWidth = 6;
+const heldRows = 10; //even to simplify code
 const carrier = "3";
+const startShortRow = Math.floor(width/2 - shortRowWidth/2);
 
 //Operation:
 
-//Makes a width x height rectangle of plain knitting on the front bed with carrier Carrier.
+//Variation on held_stitches where care isn't taken to ensure the knitting is continuous before and
+//after the bridge.
 //Uses an alternating-tucks cast-on.
 
+/*
+
+xxxxxxxx
+xxxxxxxx
+xxxxxxxx
+  xxx
+  xxx
+  xxx
+xxxxxxxx
+xxxxxxxx
+xxxxxxxx
+
+*/
 
 
 kCode += (";!knitout-2" + "\n");
@@ -23,8 +36,6 @@ kCode += (";;Carriers: 1 2 3 4 5 6 7 8 9 10" + "\n");
 
 
 kCode += ("inhook " + carrier + "\n");
-
-kCode += ("x-stitch-number 61" + "\n"); //in our table: "Half / Wrap" for Polo
 
 let min = 1;
 let max = min + width - 1;
@@ -46,8 +57,8 @@ kCode += ("miss + f" + max + " " + carrier + "\n");
 //release the hook from the carrier hook
 kCode += ("releasehook " + carrier + "\n");
 
-// Rows of plain knitting:
-for (let r = 0; r < height; ++r) {
+// Rows of plain knitting before held rows:
+for (let r = 0; r < height/2; ++r) {
 	//every other row, change direction so we knit back and forth
 	if (r % 2 == 0) {
 		//we end on the right side (i.e., going in + direction), so we start by going towards the left (-))
@@ -61,11 +72,39 @@ for (let r = 0; r < height; ++r) {
 	}
 }
 
+//Knit held short rows
+for (let r = 0; r < heldRows; ++r) {
+	if (r % 2 == 0) {
+		for (let n = (startShortRow + shortRowWidth); n >= startShortRow; --n) {
+			kCode += ("knit - f" + n + " " + carrier + "\n");
+		}
+	} else {
+		for (let n = startShortRow; n <= (startShortRow + shortRowWidth); ++n) {
+			kCode += ("knit + f" + n + " " + carrier + "\n");
+		}
+	}
+}
+
+// Rows of plain knitting after held rows:
+for (let r = 0; r < height/2; ++r) {
+	if (r % 2 == 0) {
+		for (let n = max; n >= min; --n) {
+			kCode += ("knit - f" + n + " " + carrier + "\n");
+		}
+	} else {
+		for (let n = min; n <= max; ++n) {
+			kCode += ("knit + f" + n + " " + carrier + "\n");
+		}
+	}
+}
+
+
+
 //bring yarn carrier out of action
 kCode += ("outhook " + carrier + "\n");
 
 //write to file
-fs.writeFile("./../knitout-backend-swg/examples/in/small_rectangle.knitout", kCode, function(err) {
+fs.writeFile("./../knitout-backend-swg/examples/in/held_stitches_alternate.knitout", kCode, function(err) {
     if(err) {
         return console.log(err);
     }
