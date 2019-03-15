@@ -7,7 +7,7 @@ Modified only to change width.
 
 //Parameters:
 
-const width = 16;
+const width = 20;
 const height = 40;
 const carrier = "3";
 
@@ -24,9 +24,8 @@ kCode += (";;Carriers: 1 2 3 4 5 6 7 8 9 10" + "\n");
 
 kCode += ("inhook " + carrier + "\n");
 
-kCode += ("x-stitch-number 61" + "\n"); //in our table: "Half / Wrap" for Polo
 
-let min = 1;
+let min = 11;
 let max = min + width - 1;
 
 //alternating tucks cast-on

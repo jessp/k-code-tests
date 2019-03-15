@@ -3,10 +3,10 @@ let kCode = "";
 
 //Parameters:
 
-const width = 30;
-const height = 30;//even to simplify code
-const gapWidth = 12; //how many stitches we're holding width-wise; must be less than width/2 -1
-const heldRowHeight = 6;//a factor of height for simplicity
+const width = 40;
+const height = 100;//even to simplify code
+const gapWidth = 18; //how many stitches we're holding width-wise; must be less than width/2 -1
+const heldRowHeight = 12;//a factor of height for simplicity, even for simplicity
 const carrier = "3";
 
 //Operation:

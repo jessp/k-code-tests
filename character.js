@@ -1,3 +1,5 @@
+/*For files showing file character array creation, see https://github.com/jessp/k-code-tests/tree/master/support_files/character*/
+
 const fs = require('fs');
 let kCode = "";
 
@@ -10,7 +12,7 @@ let carrier = "3";
 
 //Operation:
 
-//Makes a rectangle of 1x1 rib background with a character in perls in the center
+//Makes a rectangle of plain knit background with a character in perls in the center
 /*
   
 xxxxxxxxxxxx

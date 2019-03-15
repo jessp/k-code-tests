@@ -3,10 +3,10 @@ let kCode = "";
 
 //Parameters:
 
-const shortWidth = 10;
-const wideWidth = 30;
-const wideRows = 16;//even number so we're going towards right on transfer
-const height = 40;
+const shortWidth = 20;
+const wideWidth = 40;
+const wideRows = 30;//even number so we're going towards right on transfer
+const height = 60;
 const carrier = "3";
 
 //Operation:

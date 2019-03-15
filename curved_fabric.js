@@ -3,7 +3,7 @@ let kCode = "";
 
 //Parameters:
 
-const width = 12;
+const width = 36;
 const carrier = "3";
 
 let rowsPerStep = 2; //how many rows knitted at each stepWidth. Pretty sure this has to be a multiple of 2

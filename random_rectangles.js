@@ -215,7 +215,7 @@ function addXfersAndCastOn(data, car, code){
 
 function writeToFile(code){
 	//write to file
-	fs.writeFile("./../knitout-backend-swg/examples/in/random_rectangles2.knitout", code, function(err) {
+	fs.writeFile("./../knitout-backend-swg/examples/in/random_rectangles3.knitout", code, function(err) {
 	    if(err) {
 	        return console.log(err);
 	    }

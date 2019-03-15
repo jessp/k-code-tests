@@ -1,3 +1,8 @@
+/*
+Not my code. From Textiles Lab at: https://github.com/textiles-lab/knitout-examples
+Modified lightly to change carrier.
+*/
+
 const fs = require('fs');
 let kCode = "";
 

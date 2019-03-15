@@ -3,12 +3,18 @@ let kCode = "";
 
 //Parameters:
 
-const width = 20;
-const height = 80;
+const width = 16;
+const height = 30;
 const carrier = "3";
 
 //Operation:
-//Makes a tube with circumference of width * 2 and height of height/2
+//Makes a tube that slants on an angle
+/*
+xxxxx 
+ xxxxx
+  xxxxx
+   xxxxx
+*/
 
 
 kCode += (";!knitout-2" + "\n");
@@ -54,19 +60,33 @@ for (let r = 0; r < height; ++r) {
 	//essentially, knit going in only one way on each bed, so they only meet on the edges
 	if (r % 2 == 0) {
 		for (let n = max; n >= min; --n) {
-			kCode += ("knit - f" + n + " " + carrier + "\n");
+			// if (n % 2 == 0){
+				kCode += ("knit - f" + n + " " + carrier + "\n");
+			// }
 		}
 	} else {
 		for (let n = min; n <= max; ++n) {
-			kCode += ("knit + b" + n + " " + carrier + "\n");
+			// if (n % 2 == 0){
+				kCode += ("knit + b" + n + " " + carrier + "\n");
+			// }
 		}
 	}
+
+	if (r % 4 == 0 && r > 0){
+
+
+		min += 1;
+		max += 1;
+
+
+	}
 }
+
 
 kCode += ("outhook " + carrier + "\n");
 
 //write to file
-fs.writeFile("./../knitout-backend-swg/examples/in/tube.knitout", kCode, function(err) {
+fs.writeFile("./../knitout-backend-swg/examples/in/angled_tube_alt.knitout", kCode, function(err) {
     if(err) {
         return console.log(err);
     }

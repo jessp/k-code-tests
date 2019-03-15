@@ -35,9 +35,6 @@ function knitTwoRows() {
 	}
 }
 
-
-kCode += ("x-stitch-number 63" + "\n"); //in our table: "Knitting" for Polo
-
 // Get carrier in:
 kCode += ("inhook " + carrier + "\n");
 knitTwoRows();

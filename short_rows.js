@@ -3,10 +3,10 @@ let kCode = "";
 
 //Parameters:
 
-const width = 30;
-const height = 30;//even to simplify code
-const gapWidth = 12; //how many stitches we're holding width-wise; must be less than width/2 -1
-const heldRowHeight = 6;//a factor of height for simplicity, even for simplicity
+const width = 40;
+const height = 100;//even to simplify code
+const gapWidth = 10; //how many stitches we're holding width-wise; must be less than width/2 -1
+const heldRowHeight = 12;//a factor of height for simplicity, even for simplicity, can't be more than 12 
 const carrier = "3";
 
 //Operation:
@@ -80,8 +80,10 @@ for (let r = 0; r < height; r++){
 	//these variables will help us keep consistent code
 	if (r % heldRowHeight < heldRowHeight/2){
 		//if we're about to change the gap direction, our mins and maxes look slightly different
-		if (r % heldRowHeight == heldRowHeight/2 - 1){
+		if (r % heldRowHeight == heldRowHeight/2 - 2){
 			tempMin = min;
+		}
+		if (r % heldRowHeight == heldRowHeight/2 - 1){
 			tempMax = max;
 		} else {
 			tempMin = gapWidth;
@@ -97,6 +99,7 @@ for (let r = 0; r < height; r++){
 			tempMax = width - gapWidth;
 		}
 	}
+
 	if (r % 2 == 0) {
 		//we end on the right side (i.e., going in + direction), so we start by going towards the left (-))
 		for (let n = tempMax; n >= tempMin; --n) {
@@ -107,6 +110,8 @@ for (let r = 0; r < height; r++){
 			kCode += ("knit + f" + n + " " + carrier + "\n");
 		}
 	}
+
+
 
 }
 

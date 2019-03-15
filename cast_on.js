@@ -3,10 +3,10 @@ let kCode = "";
 
 //Parameters:
 
-const shortWidth = 10;//the narrower of the two widths
-const wideWidth = 30;//the wider of the two widths
-const shortRows = 15;//how many short rows we knit before switching to wide rows -- odd number so we're going towards right on transfer
-const height = 40;
+const shortWidth = 20;//the narrower of the two widths
+const wideWidth = 40;//the wider of the two widths
+const shortRows = 29;//how many short rows we knit before switching to wide rows -- odd number so we're going towards right on transfer
+const height = 60;
 const carrier = "3";
 
 //Operation:

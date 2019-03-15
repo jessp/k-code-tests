@@ -5,8 +5,8 @@ let kCode = "";
 
 const width = 16;
 const height = 40;//even to simplify code
-const shortRowWidth = 6;
-const heldRows = 10; //even to simplify code
+const shortRowWidth = 10;
+const heldRows = 6; //even to simplify code, six is the maximum
 const carrier = "3";
 const startShortRow = Math.floor(width/2 - shortRowWidth/2);
 

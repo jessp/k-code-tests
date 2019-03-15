@@ -1,9 +1,5 @@
 const fs = require('fs');
 let kCode = "";
-/*
-Not my code. From Textiles Lab at: https://github.com/textiles-lab/knitout-examples
-Modified only to change width.
-*/
 
 //Parameters:
 
