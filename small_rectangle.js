@@ -25,7 +25,7 @@ kCode += (";;Carriers: 1 2 3 4 5 6 7 8 9 10" + "\n");
 kCode += ("inhook " + carrier + "\n");
 
 
-let min = 11;
+let min = 1;
 let max = min + width - 1;
 
 //alternating tucks cast-on

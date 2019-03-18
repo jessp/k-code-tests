@@ -57,6 +57,12 @@ kCode += ("miss + f" + max + " " + carrier + "\n");
 kCode += ("releasehook " + carrier + "\n");
 
 for (let r = 0; r < height; ++r) {
+	if (r % 4 == 0){
+
+		min += 1;
+		max += 1;
+
+	}
 	//essentially, knit going in only one way on each bed, so they only meet on the edges
 	if (r % 2 == 0) {
 		for (let n = max; n >= min; --n) {
@@ -70,15 +76,6 @@ for (let r = 0; r < height; ++r) {
 				kCode += ("knit + b" + n + " " + carrier + "\n");
 			// }
 		}
-	}
-
-	if (r % 4 == 0 && r > 0){
-
-
-		min += 1;
-		max += 1;
-
-
 	}
 }
 
