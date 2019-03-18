@@ -25,8 +25,8 @@ kCode += (";;Carriers: 1 2 3 4 5 6 7 8 9 10" + "\n");
 
 kCode += ("inhook " + carrier + "\n");
 
-let min = 1;
-let max = min + width - 1;
+let min = 2;
+let max = min + width;
 
 //cast-on on the front bed first...
 for (let n = max; n >= min; --n) {
@@ -58,16 +58,6 @@ kCode += ("releasehook " + carrier + "\n");
 
 for (let r = 0; r < height; ++r) {
 
-	if (r % 4 == 0 && r > 0){
-		//transfer needles to a new position on the front bed
-		kCode += rack([...Array(Math.ceil((max - min)/2))].map((_, i) => min + i * 2 + 1), "f", "+");
-		//transfer needles to a new position on the back bed
-		kCode += rack([...Array(Math.ceil((max - min)/2))].map((_, i) => min + i * 2 + 1), "b", "+");
-
-		min += 2;
-		max += 2;
-	}
-
 	//essentially, knit going in only one way on each bed, so they only meet on the edges
 	if (r % 2 == 0) {
 		for (let n = max; n >= min; --n) {
@@ -81,6 +71,16 @@ for (let r = 0; r < height; ++r) {
 				kCode += ("knit + b" + n + " " + carrier + "\n");
 			}
 		}
+	}
+
+	if (r % 4 == 3){
+		min += 2;
+		max += 2;
+	} else if (r % 4 == 1 && r > 3){
+		//transfer needles to a new position on the front bed
+		kCode += rack([min, max], "f", "-");
+		//transfer needles to a new position on the back bed
+		kCode += rack([min, max], "b", "-");
 	}
 }
 

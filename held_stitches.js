@@ -4,9 +4,10 @@ let kCode = "";
 //Parameters:
 
 const width = 16;
-const height = 40;//even to simplify code
-const shortRowWidth = 10;
+const height = 80;//even to simplify code
+const shortRowWidth = 6;
 const heldRows = 6; //even to simplify code, six is the maximum
+const plainKnittingRows = 8;
 const carrier = "3";
 const startShortRow = Math.floor(width/2 - shortRowWidth/2);
 
@@ -14,7 +15,7 @@ const startShortRow = Math.floor(width/2 - shortRowWidth/2);
 
 //Makes a width x height rectangle of plain knitting with a set of stitches held in the middle 
 //on the front bed with carrier carrier.
-//Creates a sort of bridge in the centre of the fabric.
+//Creates series of bumps in the centre of the fabric.
 //Uses an alternating-tucks cast-on.
 
 /*
@@ -58,62 +59,50 @@ kCode += ("miss + f" + max + " " + carrier + "\n");
 //release the hook from the carrier hook
 kCode += ("releasehook " + carrier + "\n");
 
-// Rows of plain knitting before held rows:
-for (let r = 0; r < height/2; ++r) {
-	//every other row, change direction so we knit back and forth
-	if (r % 2 == 0) {
-		//we end on the right side (i.e., going in + direction), so we start by going towards the left (-))
-		for (let n = max; n >= min; --n) {
-			kCode += ("knit - f" + n + " " + carrier + "\n");
-		}
-	} else {
-		//knit normally...
-		if (r != height/2 - 1) {
+function knitNormally(numRows){
+	var code = "";
+	// Rows of plain knitting before held rows:
+	for (let r = 0; r < numRows; ++r) {
+		//every other row, change direction so we knit back and forth
+		if (r % 2 == 0) {
+			//we end on the right side (i.e., going in + direction), so we start by going towards the left (-))
+			for (let n = max; n >= min; --n) {
+				code += ("knit - f" + n + " " + carrier + "\n");
+			}
+		} else {
 			for (let n = min; n <= max; ++n) {
-				kCode += ("knit + f" + n + " " + carrier + "\n");
-			}
-		//...until the last row before switching to short rows, where we stitch only up to the end of shortRowWidth
-		} else {
-			for (let n = min; n <= (startShortRow + shortRowWidth); ++n) {
-				kCode += ("knit + f" + n + " " + carrier + "\n");
+				code += ("knit + f" + n + " " + carrier + "\n");
 			}
 		}
 	}
+	return code;
 }
 
-//Knit held short rows
-for (let r = 0; r < heldRows; ++r) {
-	if (r % 2 == 0) {
-		for (let n = (startShortRow + shortRowWidth); n >= startShortRow; --n) {
-			kCode += ("knit - f" + n + " " + carrier + "\n");
-		}
-	} else {
-		//knit normally...
-		if (r != heldRows - 1) {
+function knitHeldStitches(numRows){
+	var code = "";
+	//Knit held short rows
+	for (let r = 0; r < numRows; ++r) {
+		if (r % 2 == 0) {
+			for (let n = (startShortRow + shortRowWidth); n >= startShortRow; --n) {
+				code += ("knit - f" + n + " " + carrier + "\n");
+			}
+		} else {
 			for (let n = startShortRow; n <= (startShortRow + shortRowWidth); ++n) {
-				kCode += ("knit + f" + n + " " + carrier + "\n");
-			}
-		//...until the last row when we knit up to the whole width
-		} else {
-			for (let n = startShortRow; n <= max; ++n) {
-				kCode += ("knit + f" + n + " " + carrier + "\n");
+				code += ("knit + f" + n + " " + carrier + "\n");
 			}
 		}
 	}
+	return code;
 }
 
-// Rows of plain knitting after held rows:
-for (let r = 0; r < height/2; ++r) {
-	if (r % 2 == 0) {
-		for (let n = max; n >= min; --n) {
-			kCode += ("knit - f" + n + " " + carrier + "\n");
-		}
-	} else {
-		for (let n = min; n <= max; ++n) {
-			kCode += ("knit + f" + n + " " + carrier + "\n");
-		}
-	}
+
+
+for (let r = 0; r < height - plainKnittingRows; r += (heldRows + plainKnittingRows)){
+	kCode += knitNormally(plainKnittingRows);
+	kCode += knitHeldStitches(heldRows);
 }
+
+kCode += knitNormally(plainKnittingRows);
 
 
 

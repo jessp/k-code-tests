@@ -22,6 +22,7 @@ if (startKnittingSlit % 2 !== 0){
 //Makes a rectangle of size width x height in plain knit.
 //Forms a vertical slit slitHeight tall in the centre by switching fabrics and having carrierA knit one side of the hole
 //and carrierB knit the other side.
+//Unlike two_carrier_slit, all of carrierA's side of the slit is knitted before all of carrierB.
 
 /*
 
@@ -79,40 +80,49 @@ for (let r = 0; r < startKnittingSlit; ++r) {
 	}
 }
 
+//Knit the right portion of the fabric with the slit
+for (let r = 0; r < slitHeight; ++r) {
+	if (r % 2 == 0) {
+		for (let n = max; n >= midWidth; --n) {	
+			kCode += ("knit - f" + n + " " + carrierA + "\n");
+		}
+	} else {
+		for (let n = midWidth; n <= max; ++n) {
+			kCode += ("knit + f" + n + " " + carrierA + "\n");
+		}
+	}
+}
+
+//bring yarn carrier temporarily out of action
+kCode += ("outhook " + carrierA + "\n");
+
 
 // bring second carrier into action using yarn inserting hook
 kCode += ("inhook " + carrierB + "\n");
 
-//Knit the portion of the fabric with the slit
+//Knit the left portion of the fabric with the slit
 for (let r = 0; r < slitHeight; ++r) {
 	if (r % 2 == 0) {
-		for (let n = max; n >= min; --n) {
-			//knit the right side of the fabric with right side carrier, 
-			//and the left side with left side carrier
-			if (n > midWidth){
-				kCode += ("knit - f" + n + " " + carrierA + "\n");
-			} else {
-				kCode += ("knit - f" + n + " " + carrierB + "\n");
-			}
+		for (let n = (midWidth - 1); n >= min; --n) {
+			kCode += ("knit - f" + n + " " + carrierB + "\n");
 		}
 	} else {
-		for (let n = min; n <= max; ++n) {
-			if (n <= midWidth){
-				kCode += ("knit + f" + n + " " + carrierB + "\n");
-			} else {
-				kCode += ("knit + f" + n + " " + carrierA + "\n");
-			}
+		for (let n = min; n <= (midWidth - 1); ++n) {
+			kCode += ("knit + f" + n + " " + carrierB + "\n");
 		}
 	}
 
-	if (r == 0){
-		//release carrierB from the hook after 1 row of knitting
+	if (r == 1){
 		kCode += ("releasehook " + carrierB + "\n");
 	}
 }
+
 //bring yarn carrier out of action
 kCode += ("outhook " + carrierB + "\n");
 
+
+// bring first carrier into action again using yarn inserting hook
+kCode += ("inhook " + carrierA + "\n");
 
 // Rows of plain knitting after we finish knitting the slit:
 for (let r = 0; r < (height - startKnittingSlit - slitHeight); ++r) {
@@ -127,18 +137,22 @@ for (let r = 0; r < (height - startKnittingSlit - slitHeight); ++r) {
 			kCode += ("knit + f" + n + " " + carrierA + "\n");
 		}
 	}
+
+	if (r == 1) {
+		kCode += ("releasehook " + carrierA + "\n");
+	}
 }
 
 
 //bring yarn carrier out of action
 kCode += ("outhook " + carrierA + "\n");
 
+
 //write to file
-fs.writeFile("./../knitout-backend-swg/examples/in/two_carrier_slit.knitout", kCode, function(err) {
+fs.writeFile("./../knitout-backend-swg/examples/in/two_carrier_slit_alt.knitout", kCode, function(err) {
     if(err) {
         return console.log(err);
     }
 
     console.log("The file was saved!");
 }); 
-

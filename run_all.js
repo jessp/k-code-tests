@@ -12,6 +12,9 @@ fs.readdirSync("./").forEach(file => {
             } 
             console.log('finished running ' + file);
         });
+    } else {
+        return true;
+        console.log("can't run this");
     }
 })
 

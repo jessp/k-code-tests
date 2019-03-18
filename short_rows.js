@@ -3,15 +3,15 @@ let kCode = "";
 
 //Parameters:
 
-const width = 40;
+const width = 20;
 const height = 100;//even to simplify code
-const gapWidth = 10; //how many stitches we're holding width-wise; must be less than width/2 -1
+const gapWidth = 9; //how many stitches we're holding width-wise; must be less than width/2 -1
 const heldRowHeight = 12;//a factor of height for simplicity, even for simplicity, can't be more than 12 
 const carrier = "3";
 
 //Operation:
 
-//Makes a width x height rectangle of plain knitting with a set of stitches held in the middle 
+//Makes a width x height rectangle of plain knitting with a set of stitches held on alternating sides
 //on the front bed with carrier carrier.
 //Uses an alternating-tucks cast-on.
 

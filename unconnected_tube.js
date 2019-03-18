@@ -3,8 +3,8 @@ let kCode = "";
 
 //Parameters:
 
-const width = 30;
-const height = 40;
+const width = 20;
+const height = 80;
 const carrier1 = "3";
 const carrier2 = "2";
 
