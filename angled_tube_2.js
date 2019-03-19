@@ -64,6 +64,7 @@ for (let n = max; n >= min; --n) {
 	}
 }
 
+var oldMax = max;
 
 for (let r = 0; r < height; ++r) {
 
@@ -77,11 +78,16 @@ for (let r = 0; r < height; ++r) {
 	} else {
 		for (let n = min; n <= max; ++n) {
 			if (n % 2 == 0){
-				kCode += ("knit + b" + n + " " + carrier + "\n");
+				if (n == max && oldMax !== max){
+					kCode += ("tuck + b" + n + " " + carrier + "\n");
+				} else {
+					kCode += ("knit + b" + n + " " + carrier + "\n");
+				}
 			}
 		}
 	}
 
+	oldMax = max;
 	if (r % 4 == 3){
 		min += 2;
 		max += 2;
@@ -127,7 +133,7 @@ function rack(needles, bed, direction){
 kCode += ("outhook " + carrier + "\n");
 
 //write to file
-fs.writeFile("./../knitout-backend-swg/examples/in/angled_tube.knitout", kCode, function(err) {
+fs.writeFile("./../knitout-backend-swg/examples/in/angled_tube_2.knitout", kCode, function(err) {
     if(err) {
         return console.log(err);
     }

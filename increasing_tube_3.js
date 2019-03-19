@@ -63,35 +63,26 @@ var oldMax = max;
 for (let r = 0; r < height; ++r) {
 
 	if (r % 4 === 0 && (min - 2 > 0) && r > 0){
-		min = min - 2;
-		max = max + 2;
+		min = min - 1;
+	}
+
+	if (r % 4 === 1 && (min - 2 > 0) && r > 0){
+		max = max + 1;
 	}
 
 	//essentially, knit going in only one way on each bed, so they only meet on the edges
 	if (r % 2 == 0) {
 		for (let n = max; n >= min; --n) {
-			if (n < oldMin){
-				if (n % 2 == 0){
-					kCode += ("knit - f" + n + " " + carrier + "\n");
-				}
-			} else if (n > oldMax) {
-				if (n % 2 == 1){
-					kCode += ("knit - f" + n + " " + carrier + "\n");
-				}
-			}	else {
+			if (min !== oldMin && n == min){
+				kCode += ("tuck - f" + n + " " + carrier + "\n");
+			} else {
 				kCode += ("knit - f" + n + " " + carrier + "\n");
 			}
 		}
 	} else {
 		for (let n = min; n <= max; ++n) {
-			if (n < oldMin){
-				if (n % 2 == 0){
-					kCode += ("knit + b" + n + " " + carrier + "\n");
-				}
-			} else if (n > oldMax){
-				if (n % 2 == 1){
-					kCode += ("knit + b" + n + " " + carrier + "\n");
-				}
+			if (max !== oldMax && n == max){
+				kCode += ("tuck + b" + n + " " + carrier + "\n");
 			} else {
 				kCode += ("knit + b" + n + " " + carrier + "\n");
 			}
@@ -99,6 +90,8 @@ for (let r = 0; r < height; ++r) {
 	}
 	if (r % 4 === 1){
 		oldMin = min;
+	}
+	if (r % 4 === 2){
 		oldMax = max;
 	}
 }
@@ -106,7 +99,7 @@ for (let r = 0; r < height; ++r) {
 kCode += ("outhook " + carrier + "\n");
 
 //write to file
-fs.writeFile("./../knitout-backend-swg/examples/in/increasing_tube.knitout", kCode, function(err) {
+fs.writeFile("./../knitout-backend-swg/examples/in/increasing_tube_3.knitout", kCode, function(err) {
     if(err) {
         return console.log(err);
     }

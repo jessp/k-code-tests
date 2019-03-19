@@ -64,6 +64,9 @@ for (let r = 0; r < height; ++r) {
 
 	if (r % 4 === 0 && (min - 2 > 0) && r > 0){
 		min = min - 2;
+	}
+
+	if (r % 4 === 1 && (min - 2 > 0) && r > 0){
 		max = max + 2;
 	}
 
@@ -99,6 +102,8 @@ for (let r = 0; r < height; ++r) {
 	}
 	if (r % 4 === 1){
 		oldMin = min;
+	}
+	if (r % 4 === 2){
 		oldMax = max;
 	}
 }
@@ -106,7 +111,7 @@ for (let r = 0; r < height; ++r) {
 kCode += ("outhook " + carrier + "\n");
 
 //write to file
-fs.writeFile("./../knitout-backend-swg/examples/in/increasing_tube.knitout", kCode, function(err) {
+fs.writeFile("./../knitout-backend-swg/examples/in/increasing_tube_alt.knitout", kCode, function(err) {
     if(err) {
         return console.log(err);
     }
