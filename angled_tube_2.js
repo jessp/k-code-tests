@@ -64,7 +64,6 @@ for (let n = max; n >= min; --n) {
 	}
 }
 
-var oldMax = max;
 
 for (let r = 0; r < height; ++r) {
 
@@ -78,25 +77,19 @@ for (let r = 0; r < height; ++r) {
 	} else {
 		for (let n = min; n <= max; ++n) {
 			if (n % 2 == 0){
-				if (n == max && oldMax !== max){
-					kCode += ("tuck + b" + n + " " + carrier + "\n");
-				} else {
-					kCode += ("knit + b" + n + " " + carrier + "\n");
-				}
+				kCode += ("knit + b" + n + " " + carrier + "\n");
 			}
 		}
 	}
 
-	oldMax = max;
 	if (r % 4 == 3){
+		//transfer needles to a new position on the front bed
+		kCode += rack([min, max - 2, max - 4, max], "f", "+");
+		//transfer needles to a new position on the back bed
+		kCode += rack([min, max - 2, max - 4, max], "b", "+");
 		min += 2;
 		max += 2;
-	} else if (r % 4 == 1 && r > 3){
-		//transfer needles to a new position on the front bed
-		kCode += rack([min], "f", "-");
-		//transfer needles to a new position on the back bed
-		kCode += rack([min], "b", "-");
-	}
+	} 
 }
 
 //simple function to move a range of needles in a direction by transfering them to the opposing bed

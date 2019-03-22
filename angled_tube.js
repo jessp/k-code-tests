@@ -83,14 +83,13 @@ for (let r = 0; r < height; ++r) {
 	}
 
 	if (r % 4 == 3){
+		//transfer needles to a new position on the front bed
+		kCode += rack([min, max], "f", "+");
+		//transfer needles to a new position on the back bed
+		kCode += rack([min, max], "b", "+");
 		min += 2;
 		max += 2;
-	} else if (r % 4 == 1 && r > 3){
-		//transfer needles to a new position on the front bed
-		kCode += rack([min], "f", "-");
-		//transfer needles to a new position on the back bed
-		kCode += rack([min], "b", "-");
-	}
+	} 
 }
 
 //simple function to move a range of needles in a direction by transfering them to the opposing bed

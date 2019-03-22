@@ -3,8 +3,8 @@ let kCode = "";
 
 //Parameters:
 
-const width = 16;
-const height = 80;
+const width = 18;
+const height = 60;
 const carrier = "3";
 
 //Operation:
@@ -26,8 +26,9 @@ kCode += (";;Carriers: 1 2 3 4 5 6 7 8 9 10" + "\n");
 
 kCode += ("inhook " + carrier + "\n");
 
-let min = 16;
+let min = 18;//multiple of 3 for simplicity
 let max = min + width - 1;
+let ultimateWidth = (max + min);
 
 //cast-on on the front bed first...
 for (let n = max; n >= min; --n) {
@@ -59,54 +60,97 @@ kCode += ("releasehook " + carrier + "\n");
 
 var oldMin = min;
 var oldMax = max;
+let firstMinRow = true;
+let firstMaxRow = true;
+
 
 for (let r = 0; r < height; ++r) {
 
-	if (r % 4 === 0 && (min - 2 > 0) && r > 0){
-		min = min - 2;
+	if (min - 3 >= 0 && r > 0){
+		if (r % 8 === 0){
+			min = min - 3;
+		}
+
+		if (r % 8 === 1){
+			max = max + 3;
+		}
 	}
 
-	if (r % 4 === 1 && (min - 2 > 0) && r > 0){
-		max = max + 2;
-	}
 
 	//essentially, knit going in only one way on each bed, so they only meet on the edges
 	if (r % 2 == 0) {
 		for (let n = max; n >= min; --n) {
 			if (n < oldMin){
-				if (n % 2 == 0){
-					kCode += ("knit - f" + n + " " + carrier + "\n");
+				if (oldMin % 2 == 0){
+					if (n % 2 == 0){
+						kCode += ("knit - f" + n + " " + carrier + "\n");
+					}
+				} else {
+					if (n % 2 == 1){
+						kCode += ("knit - f" + n + " " + carrier + "\n");
+					}
 				}
 			} else if (n > oldMax) {
-				if (n % 2 == 1){
+				if (oldMax % 2 == 0){
+					if (n % 2 == 0){
+						kCode += ("knit - f" + n + " " + carrier + "\n");
+					}
+				} else {
+					if (n % 2 == 1){
+						kCode += ("knit - f" + n + " " + carrier + "\n");
+					}
+				}
+			} else {
+				if (n === 0 && firstMinRow){
+					firstMinRow = false;
+				} else {
 					kCode += ("knit - f" + n + " " + carrier + "\n");
 				}
-			}	else {
-				kCode += ("knit - f" + n + " " + carrier + "\n");
 			}
 		}
 	} else {
 		for (let n = min; n <= max; ++n) {
 			if (n < oldMin){
-				if (n % 2 == 0){
-					kCode += ("knit + b" + n + " " + carrier + "\n");
+				if (oldMin % 2 == 0){
+					if (n % 2 == 0){
+						kCode += ("knit + b" + n + " " + carrier + "\n");
+					}
+				} else {
+					if (n % 2 == 1){
+						kCode += ("knit + b" + n + " " + carrier + "\n");
+					}
 				}
 			} else if (n > oldMax){
-				if (n % 2 == 1){
-					kCode += ("knit + b" + n + " " + carrier + "\n");
+				if (oldMax % 2 == 0){
+					if (n % 2 == 0){
+						kCode += ("knit + b" + n + " " + carrier + "\n");
+					}
+				} else {
+					if (n % 2 == 1){
+						kCode += ("knit + b" + n + " " + carrier + "\n");
+					}
 				}
 			} else {
-				kCode += ("knit + b" + n + " " + carrier + "\n");
+				if (n === ultimateWidth && firstMaxRow){
+					firstMaxRow = false;
+				} else {
+					kCode += ("knit + b" + n + " " + carrier + "\n");
+				}
 			}
 		}
 	}
+
+
 	if (r % 4 === 1){
 		oldMin = min;
 	}
 	if (r % 4 === 2){
 		oldMax = max;
 	}
+
+
 }
+
 
 kCode += ("outhook " + carrier + "\n");
 
