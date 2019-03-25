@@ -1,7 +1,7 @@
 const fs = require('fs');
 const http = require('http');
 
-let country = "NOR";
+let country = "AUS";
 getWeather(country);
 
 
@@ -12,6 +12,7 @@ var maxWidth = 20;
 var minWidth = 4;
 var index = 0;
 let segmentHeight = totalHeight/12;
+var prevCarrier;
 
 
 function getWeather(country){
@@ -44,6 +45,8 @@ function makeShape(){
 
 	let minVal = Math.min(...tempArray[0]["monthVals"]);
 	let maxVal = Math.max(...tempArray[0]["monthVals"]);
+	let meanPrecipiation = precipArray[0]["monthVals"].reduce((sume, el) => sume + el, 0) / precipArray[0]["monthVals"].length;
+
 
 	let newArray = [];
 	for (var i = 0; i < tempArray[0]["monthVals"].length; i++){
@@ -54,31 +57,50 @@ function makeShape(){
 
 	let min = 0;
 	let max = maxWidth;
-	let carrier = "3";
-
-	kCode += doCastOn(newArray[0], carrier);
-
 
 	for (var i = 0; i < newArray.length; i++){
 		let startTube = newArray[i];
 		let endTube = newArray[(i+1)%newArray.length];
+		let carrier = precipArray[0]["monthVals"][i] > meanPrecipiation ? "3" : "2"; 
+
+		if (i === 0){
+			kCode += doCastOn(newArray[0], carrier);
+		} else {
+			if (carrier !== prevCarrier){
+				kCode += doCastOff(prevCarrier);
+			}
+		}
+
+		var doCast = false;
+		if ((carrier !== prevCarrier) && i > 0){
+			kCode += ("inhook " + carrier + "\n");
+			doCast = true;
+		}
+
 		if (endTube > startTube) {
-			kCode += makeWider(startTube, endTube, carrier);
+			kCode += makeWider(startTube, endTube, carrier, doCast);
 		} else if (endTube == startTube){
 
-			kCode += makeTube(startTube, endTube, carrier);
+			kCode += makeTube(startTube, endTube, carrier, doCast);
 		} else {
-			kCode += makeNarrower(startTube, endTube, carrier);
+			kCode += makeNarrower(startTube, endTube, carrier, doCast);
 		}
-	}
 
-	kCode += ("outhook " + carrier + "\n");
+		prevCarrier = carrier;
+	}
 
 	writeFile(kCode, country);
 
 }
 
-function makeWider(_min, _max, carrier){
+function doCastOff(carrier){
+	let code = "";
+	code += ("outhook " + carrier + "\n");
+	code += ("outhook " + carrier + "\n");
+	return code;
+}
+
+function makeWider(_min, _max, carrier, doRelease){
 	let code = "";
 
 	let startingMin = maxWidth - _min;
@@ -124,13 +146,18 @@ function makeWider(_min, _max, carrier){
 			}
 		}
 
+		if (i === 0 && doRelease){
+			code += ("releasehook " + carrier + "\n");
+			castOn = false;
+		}
+
 		index ++;
 	}
 
 	return code;
 }
 
-function makeTube(_min, _max, carrier){
+function makeTube(_min, _max, carrier, doRelease){
 	let code = "";
 	let min = maxWidth - _min;
 	let max = maxWidth + _min;
@@ -150,12 +177,19 @@ function makeTube(_min, _max, carrier){
 				}
 			}
 		}
+
+		if (i === 0 && doRelease){
+			code += ("releasehook " + carrier + "\n");
+			castOn = false;
+		}
 		index ++;
 	}
 	return code;
 }
 
-function makeNarrower(_min, _max, carrier){
+
+
+function makeNarrower(_min, _max, carrier, doRelease){
 	let code = "";
 
 	let startingMin = maxWidth - _min;
@@ -199,6 +233,11 @@ function makeNarrower(_min, _max, carrier){
 				code += rack([actingMin, actingMin + 2], "f", "+");
 				actingMin = actingMin + 2;
 			}
+		}
+
+		if (i === 0 && doRelease){
+			code += ("releasehook " + carrier + "\n");
+			castOn = false;
 		}
 
 		index ++;
