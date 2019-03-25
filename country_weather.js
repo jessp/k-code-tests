@@ -1,7 +1,7 @@
 const fs = require('fs');
 const http = require('http');
 
-let country = "CAN";
+let country = "NOR";
 getWeather(country);
 
 
@@ -11,6 +11,7 @@ var totalHeight = 120; //multiple of 12
 var maxWidth = 20;
 var minWidth = 4;
 var index = 0;
+let segmentHeight = totalHeight/12;
 
 
 function getWeather(country){
@@ -55,22 +56,18 @@ function makeShape(){
 	let max = maxWidth;
 	let carrier = "3";
 
-	kCode += doCastOn(min, max, carrier);
+	kCode += doCastOn(newArray[0], carrier);
 
 
 	for (var i = 0; i < newArray.length; i++){
 		let startTube = newArray[i];
 		let endTube = newArray[(i+1)%newArray.length];
 		if (endTube > startTube) {
-			console.log("1");
 			kCode += makeWider(startTube, endTube, carrier);
 		} else if (endTube == startTube){
-						console.log("2");
 
 			kCode += makeTube(startTube, endTube, carrier);
 		} else {
-						console.log("3");
-
 			kCode += makeNarrower(startTube, endTube, carrier);
 		}
 	}
@@ -93,8 +90,11 @@ function makeWider(_min, _max, carrier){
 	var actingMin = startingMin;
 	var actingMax = startingMax;
 
+	let numDecreases = Math.ceil(segmentHeight/(_max - _min));
+	let proportionDecreases = (numDecreases/segmentHeight) * segmentHeight;
 
-	while ((actingMax + 2 <= endingMax) || (actingMin - 2 >= endingMin)){
+
+	for (var i = 0; i < segmentHeight; i++){
 		if (index % 2 === 0){
 			for (let n = actingMax; n >= actingMin; --n) {
 				//remember we're knitting on every other needle
@@ -110,16 +110,18 @@ function makeWider(_min, _max, carrier){
 			}
 		}
 
-		if ((actingMax + 2) <= endingMax){
-			code += rack([actingMax, actingMax - 2], "f", "+");
-			code += rack([actingMax, actingMax - 2], "b", "+");
-			actingMax = actingMax + 2; 
-		}
+		if (i % proportionDecreases === 0){
+			if ((actingMax + 2) <= endingMax){
+				code += rack([actingMax, actingMax - 2], "f", "+");
+				code += rack([actingMax, actingMax - 2], "b", "+");
+				actingMax = actingMax + 2; 
+			}
 
-		if ((actingMin - 2) >= endingMin){
-			code += rack([actingMin, actingMin + 2], "b", "-");
-			code += rack([actingMin, actingMin + 2], "f", "-");
-			actingMin = actingMin - 2;
+			if ((actingMin - 2) >= endingMin){
+				code += rack([actingMin, actingMin + 2], "b", "-");
+				code += rack([actingMin, actingMin + 2], "f", "-");
+				actingMin = actingMin - 2;
+			}
 		}
 
 		index ++;
@@ -133,7 +135,7 @@ function makeTube(_min, _max, carrier){
 	let min = maxWidth - _min;
 	let max = maxWidth + _min;
 
-	while (index < totalHeight/12) {
+	for (var i = 0; i < segmentHeight; i++){
 		if (index % 2 == 0) {
 			for (let n = max; n >= min; --n) {
 				//remember we're knitting on every other needle
@@ -154,6 +156,8 @@ function makeTube(_min, _max, carrier){
 }
 
 function makeNarrower(_min, _max, carrier){
+	let code = "";
+
 	let startingMin = maxWidth - _min;
 	let startingMax = maxWidth + _min;
 
@@ -163,10 +167,11 @@ function makeNarrower(_min, _max, carrier){
 	var actingMin = startingMin;
 	var actingMax = startingMax;
 
-	let code = "";
+	let numDecreases = Math.ceil(segmentHeight/(_min - _max));
+	let proportionDecreases = (numDecreases/segmentHeight) * segmentHeight;
 
 
-	while ((actingMax - 2 >= endingMax) || (actingMin + 2 <= endingMin)){
+	for (var i = 0; i < segmentHeight; i++){
 		if (index % 2 === 0){
 			for (let n = actingMax; n >= actingMin; --n) {
 				//remember we're knitting on every other needle
@@ -182,16 +187,18 @@ function makeNarrower(_min, _max, carrier){
 			}
 		}
 
-		if ((actingMax - 2) >= endingMax){
-			code += rack([actingMax, actingMax - 2], "f", "-");
-			code += rack([actingMax, actingMax - 2], "b", "-");
-			actingMax = actingMax - 2; 
-		}
+		if (i % proportionDecreases === 0){
+			if ((actingMax - 2) >= endingMax){
+				code += rack([actingMax, actingMax - 2], "f", "-");
+				code += rack([actingMax, actingMax - 2], "b", "-");
+				actingMax = actingMax - 2; 
+			}
 
-		if ((actingMin + 2) <= endingMin){
-			code += rack([actingMin, actingMin + 2], "b", "+");
-			code += rack([actingMin, actingMin + 2], "f", "+");
-			actingMin = actingMin + 2;
+			if ((actingMin + 2) <= endingMin){
+				code += rack([actingMin, actingMin + 2], "b", "+");
+				code += rack([actingMin, actingMin + 2], "f", "+");
+				actingMin = actingMin + 2;
+			}
 		}
 
 		index ++;
@@ -239,9 +246,11 @@ function setup(){
 	return code;
 }
 
-function doCastOn(min, max, carrier){
+function doCastOn(val, carrier){
 	let code = "";
 	code += ("inhook " + carrier + "\n");
+	let min = maxWidth - val;
+	let max = maxWidth + val;
 	//cast-on on the front bed first...
 	for (let n = max; n >= min; --n) {
 		if ((max-n) % 4 == 0) {
