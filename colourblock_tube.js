@@ -4,7 +4,7 @@ let kCode = "";
 //Parameters:
 
 const width = 16;
-const height = 80;
+const height = 80; //even for convenience
 const carrierA = "3";
 const carrierB = "2";
 
@@ -51,38 +51,61 @@ kCode += ("miss + f" + max + " " + carrierA + "\n");
 
 kCode += ("releasehook " + carrierA + "\n");
 
-var carrier = carrierA;
-for (let r = 0; r < height; ++r) {
-
-	if (r % 2 === 0 && r > 1){
-		carrier = carrier === carrierA ? carrierB : carrierA;
-	}
-
-	if (carrier === carrierB && r === 2){
-		kCode += ("inhook " + carrierB + "\n");
-	}
+//knit first half in yarn A
+for (let r = 0; r < height/2; ++r) {
 
 	//essentially, knit going in only one way on each bed, so they only meet on the edges
 	if (r % 2 == 0) {
 		for (let n = max; n >= min; --n) {
-			kCode += ("knit - f" + n + " " + carrier + "\n");
+			kCode += ("knit - f" + n + " " + carrierA + "\n");
 		}
 	} else {
 		for (let n = min; n <= max; ++n) {
-			kCode += ("knit + b" + n + " " + carrier + "\n");
+			kCode += ("knit + b" + n + " " + carrierA + "\n");
 		}
 	}
 
-	if (carrier === carrierB && r === 2){
-		kCode += ("releasehook " + carrierB + "\n");
-	}
 }
 
 kCode += ("outhook " + carrierA + "\n");
+
+//bring in yarn B
+kCode += ("inhook " + carrierB + "\n");
+
+for (let r = 0; r < 4; ++r) {
+	//essentially, knit going in only one way on each bed, so they only meet on the edges
+	if (r % 2 == 0) {
+		for (let n = max; n >= min; --n) {
+			kCode += ("knit - f" + n + " " + carrierB + "\n");
+		}
+	} else {
+		for (let n = min; n <= max; ++n) {
+			kCode += ("knit + b" + n + " " + carrierB + "\n");
+		}
+	}
+}
+
+kCode += ("releasehook " + carrierB + "\n");
+
+//knit second half in yarn B
+for (let r = 0; r < height/2 - 4; ++r) {
+
+	//essentially, knit going in only one way on each bed, so they only meet on the edges
+	if (r % 2 == 0) {
+		for (let n = max; n >= min; --n) {
+			kCode += ("knit - f" + n + " " + carrierB + "\n");
+		}
+	} else {
+		for (let n = min; n <= max; ++n) {
+			kCode += ("knit + b" + n + " " + carrierB + "\n");
+		}
+	}
+}
+
 kCode += ("outhook " + carrierB + "\n");
 
 //write to file
-fs.writeFile("./../knitout-backend-swg/examples/in/tube_A.knitout", kCode, function(err) {
+fs.writeFile("./../knitout-backend-swg/examples/in/colourblock_tube.knitout", kCode, function(err) {
     if(err) {
         return console.log(err);
     }

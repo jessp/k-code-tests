@@ -14,6 +14,7 @@ const carrier2 = "2";
 //and knitted on the back bed with carrier 2.
 //Each rectangle is width x height/2.
 //Uses an alternating-tucks cast-on.
+//doesn't work :(
 
 
 kCode += (";!knitout-2" + "\n");

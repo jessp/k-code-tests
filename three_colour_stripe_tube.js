@@ -11,6 +11,7 @@ const carrierC = "1";
 
 //Operation:
 //Makes a tube with circumference of width * 2 and height of height/2
+//alternates between three different colours
 
 
 kCode += (";!knitout-2" + "\n");
