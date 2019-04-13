@@ -124,7 +124,7 @@ kCode += ("outhook " + carrierB + "\n");
 kCode += ("outhook " + carrierC + "\n");
 
 //write to file
-fs.writeFile("./../knitout-backend-swg/examples/in/tube_C.knitout", kCode, function(err) {
+fs.writeFile("./../knitout-backend-swg/examples/in/three_colour_stripe_tube.knitout", kCode, function(err) {
     if(err) {
         return console.log(err);
     }

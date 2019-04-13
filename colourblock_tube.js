@@ -10,6 +10,7 @@ const carrierB = "2";
 
 //Operation:
 //Makes a tube with circumference of width * 2 and height of height/2
+//Bottom half is one colour, top half is another colour
 
 
 kCode += (";!knitout-2" + "\n");

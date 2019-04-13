@@ -83,7 +83,7 @@ kCode += ("outhook " + carrierA + "\n");
 kCode += ("outhook " + carrierB + "\n");
 
 //write to file
-fs.writeFile("./../knitout-backend-swg/examples/in/tube_A.knitout", kCode, function(err) {
+fs.writeFile("./../knitout-backend-swg/examples/in/two_colour_stripe_tube.knitout", kCode, function(err) {
     if(err) {
         return console.log(err);
     }

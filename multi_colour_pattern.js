@@ -1,9 +1,5 @@
 const fs = require('fs');
 let kCode = "";
-/*
-Not my code. From Textiles Lab at: https://github.com/textiles-lab/knitout-examples
-Modified only to change width.
-*/
 
 //Parameters:
 const height = 80;
@@ -63,9 +59,7 @@ for (let r = 0; r < height; ++r) {
 			} else {
 				if (n % 4 < 2){
 					kCode += ("knit - f" + n + " " + carrierA + "\n");
-					// kCode += ("tuck - f" + n + " " + carrierB + "\n");
 				} else {
-					// kCode += ("tuck - f" + n + " " + carrierA + "\n");
 					kCode += ("knit - f" + n + " " + carrierB + "\n");
 				}
 			}
@@ -77,9 +71,7 @@ for (let r = 0; r < height; ++r) {
 			} else {
 				if (n % 4 < 2){
 					kCode += ("knit + f" + n + " " + carrierA + "\n");
-					// kCode += ("tuck + f" + n + " " + carrierB + "\n");
 				} else {
-					// kCode += ("tuck + f" + n + " " + carrierA + "\n");
 					kCode += ("knit + f" + n + " " + carrierB + "\n");
 				}
 			}

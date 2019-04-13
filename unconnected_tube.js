@@ -5,8 +5,8 @@ let kCode = "";
 
 const width = 20;
 const height = 80;
-const carrier1 = "3";
-const carrier2 = "2";
+const carrier1 = "2";
+const carrier2 = "3";
 
 //Operation:
 
@@ -46,6 +46,7 @@ kCode += ("releasehook " + carrier1 + "\n");
 
 //Alternating tucks cast-on on back bed with carrier 2
 kCode += ("inhook " + carrier2 + "\n");
+
 
 for (let n = max; n >= min; --n) {
 	if ((max-n) % 2 == 0) {
